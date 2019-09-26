@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package wreckball;
+package codigo;
 
 /**
  *
@@ -12,11 +12,20 @@ package wreckball;
  */
 
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -267,8 +276,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
 
         pack();
@@ -299,16 +308,47 @@ public class PrincipalCompi extends javax.swing.JFrame {
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-        Guardar();
-
-        String texto = jtxtArea.getText();
-        String palabras = "";
-        String[] lineas = texto.split("\n");
+        File archivo=new File("archivo.txt");
+        PrintWriter escribir;
+        try {
+            escribir=new PrintWriter(archivo);
+            escribir.print(jtxtArea.getText());
+            escribir.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        limpiarTablas();
-        
-
+        try {
+            Reader lector=new BufferedReader(new FileReader("archivo.txt"));
+            Lexer lexer=new Lexer(lector);
+            String resultado="";
+            while(true){
+                Tokens tokens=lexer.yylex();
+                if(tokens==null){
+                    resultado+="FIN";
+                    output.setText(resultado);
+                    return;
+                }
+                switch(tokens){
+                    case ERROR:
+                        resultado+="Símbolo no definido\n";
+                        break;
+                    case Identificador: case Numero:
+                        resultado+=lexer.lexeme+": Es un "+tokens+"\n";
+                        break;
+                    case Division: case Multiplicacion: case Resta: case Suma: case Igual:
+                        resultado+=lexer.lexeme+": Es un signo de "+tokens+"\n";
+                        break;
+                    case Reservadas:
+                        resultado+=lexer.lexeme+": Es una palabra reservada\n";
+                        break;
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
     
     public void contarFilas(){
