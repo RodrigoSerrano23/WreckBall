@@ -12,6 +12,7 @@ package codigo;
  */
 
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -23,9 +24,12 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java_cup.Lexer;
+import java_cup.runtime.Symbol;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -40,6 +44,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
    
     private String dirNuevo="";
     private String nomNuevo="";
+    String resultado;
     
     public PrincipalCompi() {
         initComponents();
@@ -52,7 +57,116 @@ public class PrincipalCompi extends javax.swing.JFrame {
         
     }
     
-       
+    private void analizarLexico() throws IOException{
+        int cont = 1;
+        
+        String expr = (String) jtxtArea.getText();
+        codigo.Lexer lexer = new codigo.Lexer(new StringReader(expr));
+        resultado = "LINEA " + cont + "\t\tSIMBOLO\n";
+        while (true) {
+            Tokens token = lexer.yylex();
+            if (token == null) {
+                //output.setText(resultado);
+                return;
+            }
+            switch (token) {
+                case Linea:
+                    cont++;
+                    resultado += "LINEA " + cont + "\n";
+                    break;
+                case Comillas:
+                    resultado += "  <Comillas>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Cadena:
+                    resultado += "  <Tipo de dato>\t" + lexer.lexeme + "\n";
+                    break;
+                case T_dato:
+                    resultado += "  <Tipo de dato>\t" + lexer.lexeme + "\n";
+                    break;
+                case If:
+                    resultado += "  <Reservada if>\t" + lexer.lexeme + "\n";
+                    break;
+                case Else:
+                    resultado += "  <Reservada else>\t" + lexer.lexeme + "\n";
+                    break;
+                case Do:
+                    resultado += "  <Reservada do>\t" + lexer.lexeme + "\n";
+                    break;
+                case While:
+                    resultado += "  <Reservada while>\t" + lexer.lexeme + "\n";
+                    break;
+                case For:
+                    resultado += "  <Reservada while>\t" + lexer.lexeme + "\n";
+                    break;
+                case Igual:
+                    resultado += "  <Operador igual>\t" + lexer.lexeme + "\n";
+                    break;
+                case Suma:
+                    resultado += "  <Operador suma>\t" + lexer.lexeme + "\n";
+                    break;
+                case Resta:
+                    resultado += "  <Operador resta>\t" + lexer.lexeme + "\n";
+                    break;
+                case Multiplicacion:
+                    resultado += "  <Operador multiplicacion>\t" + lexer.lexeme + "\n";
+                    break;
+                case Division:
+                    resultado += "  <Operador division>\t" + lexer.lexeme + "\n";
+                    break;
+                case Op_logico:
+                    resultado += "  <Operador logico>\t" + lexer.lexeme + "\n";
+                    break;
+                case Op_incremento:
+                    resultado += "  <Operador incremento>\t" + lexer.lexeme + "\n";
+                    break;
+                case Op_relacional:
+                    resultado += "  <Operador relacional>\t" + lexer.lexeme + "\n";
+                    break;
+                case Op_atribucion:
+                    resultado += "  <Operador atribucion>\t" + lexer.lexeme + "\n";
+                    break;
+                case Op_booleano:
+                    resultado += "  <Operador booleano>\t" + lexer.lexeme + "\n";
+                    break;
+                case Parentesis_a:
+                    resultado += "  <Parentesis de apertura>\t" + lexer.lexeme + "\n";
+                    break;
+                case Parentesis_c:
+                    resultado += "  <Parentesis de cierre>\t" + lexer.lexeme + "\n";
+                    break;
+                case Llave_a:
+                    resultado += "  <Llave de apertura>\t" + lexer.lexeme + "\n";
+                    break;
+                case Llave_c:
+                    resultado += "  <Llave de cierre>\t" + lexer.lexeme + "\n";
+                    break;
+                case Corchete_a:
+                    resultado += "  <Corchete de apertura>\t" + lexer.lexeme + "\n";
+                    break;
+                case Corchete_c:
+                    resultado += "  <Corchete de cierre>\t" + lexer.lexeme + "\n";
+                    break;
+                case Main:
+                    resultado += "  <Reservada main>\t" + lexer.lexeme + "\n";
+                    break;
+                case P_coma:
+                    resultado += "  <Punto y coma>\t" + lexer.lexeme + "\n";
+                    break;
+                case Identificador:
+                    resultado += "  <Identificador>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Numero:
+                    resultado += "  <Numero>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case ERROR:
+                    resultado += "  <Simbolo no definido>\n";
+                    break;
+                default:
+                    resultado += "  < " + lexer.lexeme + " >\n";
+                    break;
+            }
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -166,14 +280,15 @@ public class PrincipalCompi extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
             .addComponent(lineCounter)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jScrollPane3.setViewportView(jPanel1);
@@ -308,46 +423,25 @@ public class PrincipalCompi extends javax.swing.JFrame {
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        File archivo=new File("archivo.txt");
-        PrintWriter escribir;
         try {
-            escribir=new PrintWriter(archivo);
-            escribir.print(jtxtArea.getText());
-            escribir.close();
-        } catch (FileNotFoundException ex) {
+            analizarLexico();
+        } catch (IOException ex) {
             Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        String ST = jtxtArea.getText();
+        Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
+        
         try {
-            Reader lector=new BufferedReader(new FileReader("archivo.txt"));
-            Lexer lexer=new Lexer(lector);
-            String resultado="";
-            while(true){
-                Tokens tokens=lexer.yylex();
-                if(tokens==null){
-                    resultado+="FIN";
-                    output.setText(resultado);
-                    return;
-                }
-                switch(tokens){
-                    case ERROR:
-                        resultado+="Símbolo no definido\n";
-                        break;
-                    case Identificador: case Numero:
-                        resultado+=lexer.lexeme+": Es un "+tokens+"\n";
-                        break;
-                    case Division: case Multiplicacion: case Resta: case Suma: case Igual:
-                        resultado+=lexer.lexeme+": Es un signo de "+tokens+"\n";
-                        break;
-                    case Reservadas:
-                        resultado+=lexer.lexeme+": Es una palabra reservada\n";
-                        break;
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
+            s.parse();
+            resultado+="\nAnalisis realizado correctamente";
+            output.setText(resultado);
+            output.setForeground(new Color(25, 111, 61));
+        } catch (Exception ex) {
+            Symbol sym = s.getS();
+            resultado+="\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
+            output.setText(resultado);
+            output.setForeground(Color.red);
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
     
@@ -386,7 +480,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
     private void jtxtAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtAreaKeyPressed
         // TODO add your handling code here:
-        output.setText("");
+        //output.setText("");
     }//GEN-LAST:event_jtxtAreaKeyPressed
 
     private void jtxtAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtAreaKeyReleased
