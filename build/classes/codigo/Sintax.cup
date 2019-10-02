@@ -15,10 +15,12 @@ parser code
 }
 :};
 
-terminal Linea, Comillas, T_dato, Int, Cadena, If, Else, Do, While, For,
+terminal Linea, Comillas, T_dato, Cadena, If, Else, Do, While, For, StopLoop,
+    SpinCraneLeft, SpinCraneRight, MoveFowardCrane, MoveBackCrane,
+    SpinBallLeft, SpinBallRight, HitToTheLeft, HitToTheRight,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
-    Llave_a, Llave_c, Corchete_a, Corchete_c, Main, P_coma, Identificador,
+    Llave_a, Llave_c, Corchete_a, Corchete_c, Start, P_coma, Identificador,
     Numero, ERROR;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR;
@@ -26,8 +28,7 @@ non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
 start with INICIO;
 
 INICIO ::= 
-    Int Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
-    Main Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c
+    Start Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c
 ;
 SENTENCIA ::= 
     SENTENCIA DECLARACION |
@@ -44,11 +45,6 @@ SENTENCIA ::=
     FOR
 ;
 DECLARACION ::= 
-    Int Identificador P_coma | 
-    Int Identificador Op_atribucion Numero P_coma |
-    Int Identificador Igual Numero P_coma |
-    Int Identificador Op_incremento P_coma | 
-    Int Op_incremento Identificador P_coma | 
     T_dato Identificador P_coma | 
     T_dato Identificador Op_atribucion Numero P_coma |
     T_dato Identificador Igual Numero P_coma |
@@ -57,7 +53,22 @@ DECLARACION ::=
     Cadena Identificador Op_atribucion Comillas Comillas P_coma |
     Cadena Identificador Igual Comillas Comillas P_coma |
     Cadena Identificador Op_atribucion Comillas Identificador Comillas P_coma |
-    Cadena Identificador Igual Comillas Identificador Comillas P_coma
+    Cadena Identificador Igual Comillas Identificador Comillas P_coma |
+    SpinCraneLeft Parentesis_a Numero Parentesis_c P_coma |
+    SpinCraneLeft Parentesis_a Identificador Parentesis_c P_coma |
+    SpinCraneRight Parentesis_a Numero Parentesis_c P_coma |
+    SpinCraneRight Parentesis_a Identificador Parentesis_c P_coma |
+    MoveFowardCrane Parentesis_a Numero Parentesis_c P_coma |
+    MoveFowardCrane Parentesis_a Identificador Parentesis_c P_coma |
+    MoveBackCrane Parentesis_a Numero Parentesis_c P_coma |
+    MoveBackCrane Parentesis_a Identificador Parentesis_c P_coma |
+    SpinBallLeft Parentesis_a Numero Parentesis_c P_coma |
+    SpinBallLeft Parentesis_a Identificador Parentesis_c P_coma |
+    SpinBallRight Parentesis_a Numero Parentesis_c P_coma |
+    SpinBallRight Parentesis_a Identificador Parentesis_c P_coma |
+    HitToTheLeft Parentesis_a Parentesis_c P_coma |
+    HitToTheRight Parentesis_a Parentesis_c P_coma |
+    StopLoop P_coma
 ;
 IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
 ;

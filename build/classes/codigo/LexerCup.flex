@@ -30,10 +30,7 @@ espacio=[ ,\t,\r,\n]+
 ( "\"" ) {return new Symbol(sym.Comillas, yychar, yyline, yytext());}
 
 /* Tipos de datos */
-( byte | char | long | float | double ) {return new Symbol(sym.T_dato, yychar, yyline, yytext());}
-
-/* Tipo de dato Int (Para el main) */
-( "int" ) {return new Symbol(sym.Int, yychar, yyline, yytext());}
+( byte | char | long | float | double | int ) {return new Symbol(sym.T_dato, yychar, yyline, yytext());}
 
 /* Tipo de dato String */
 ( String ) {return new Symbol(sym.Cadena, yychar, yyline, yytext());}
@@ -52,6 +49,33 @@ espacio=[ ,\t,\r,\n]+
 
 /* Palabra reservada For */
 ( for ) {return new Symbol(sym.For, yychar, yyline, yytext());}
+
+/* Palabra reservada StopLoop */
+( stopLoop ) {return new Symbol(sym.StopLoop, yychar, yyline, yytext());}
+
+/* Método SpinCraneLeft */
+( spinCraneLeft ) {return new Symbol(sym.SpinCraneLeft, yychar, yyline, yytext());}
+
+/* Método SpinCraneRight */
+( spinCraneRight ) {return new Symbol(sym.SpinCraneRight, yychar, yyline, yytext());}
+
+/* Método MoveFowardCrane */
+( moveFowardCrane ) {return new Symbol(sym.MoveFowardCrane, yychar, yyline, yytext());}
+
+/* Método MoveBackCrane */
+( moveBackCrane ) {return new Symbol(sym.MoveBackCrane, yychar, yyline, yytext());}
+
+/* Método SpinBallLeft */
+( spinBallLeft ) {return new Symbol(sym.SpinBallLeft, yychar, yyline, yytext());}
+
+/* Método SpinBallRight */
+( spinBallRight ) {return new Symbol(sym.SpinBallRight, yychar, yyline, yytext());}
+
+/* Método HitToTheLeft */
+( hitToTheLeft ) {return new Symbol(sym.HitToTheLeft, yychar, yyline, yytext());}
+
+/* Método HitToTheRight */
+( hitToTheRight ) {return new Symbol(sym.HitToTheRight, yychar, yyline, yytext());}
 
 /* Operador Igual */
 ( "=" ) {return new Symbol(sym.Igual, yychar, yyline, yytext());}
@@ -102,7 +126,7 @@ espacio=[ ,\t,\r,\n]+
 ( "]" ) {return new Symbol(sym.Corchete_c, yychar, yyline, yytext());}
 
 /* Marcador de inicio de algoritmo */
-( "main" ) {return new Symbol(sym.Main, yychar, yyline, yytext());}
+( "start" ) {return new Symbol(sym.Start, yychar, yyline, yytext());}
 
 /* Punto y coma */
 ( ";" ) {return new Symbol(sym.P_coma, yychar, yyline, yytext());}

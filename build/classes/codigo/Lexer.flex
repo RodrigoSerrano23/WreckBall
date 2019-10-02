@@ -44,6 +44,33 @@ espacio=[ ,\t,\r]+
 /* Palabra reservada For */
 ( for ) {lexeme=yytext(); return For;}
 
+/* Palabra reservada StopLoop */
+( stopLoop ) {lexeme=yytext(); return StopLoop;}
+
+/* Método SpinCraneLeft */
+( spinCraneLeft ) {lexeme=yytext(); return SpinCraneLeft;}
+
+/* Método SpinCraneRight */
+( spinCraneRight ) {lexeme=yytext(); return SpinCraneRight;}
+
+/* Método MoveFowardCrane */
+( moveFowardCrane ) {lexeme=yytext(); return MoveFowardCrane;}
+
+/* Método MoveBackCrane */
+( moveBackCrane ) {lexeme=yytext(); return MoveBackCrane;}
+
+/* Método SpinBallLeft */
+( spinBallLeft ) {lexeme=yytext(); return SpinBallLeft;}
+
+/* Método SpinBallRight */
+( spinBallRight ) {lexeme=yytext(); return SpinBallRight;}
+
+/* Método HitToTheLeft */
+( hitToTheLeft ) {lexeme=yytext(); return HitToTheLeft;}
+
+/* Método HitToTheRight */
+( hitToTheRight ) {lexeme=yytext(); return HitToTheRight;}
+
 /* Operador Igual */
 ( "=" ) {lexeme=yytext(); return Igual;}
 
@@ -93,7 +120,7 @@ espacio=[ ,\t,\r]+
 ( "]" ) {lexeme = yytext(); return Corchete_c;}
 
 /* Marcador de inicio de algoritmo */
-( "main" ) {lexeme=yytext(); return Main;}
+( "start" ) {lexeme=yytext(); return Start;}
 
 /* Punto y coma */
 ( ";" ) {lexeme=yytext(); return P_coma;}

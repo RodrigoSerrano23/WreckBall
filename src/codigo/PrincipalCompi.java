@@ -98,6 +98,33 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 case For:
                     resultado += "  <Reservada while>\t" + lexer.lexeme + "\n";
                     break;
+                case StopLoop:
+                    resultado += "  <Reservada stopLoop>\t" + lexer.lexeme + "\n";
+                    break;
+                case SpinCraneLeft:
+                    resultado += "  <Método spinCraneLeft>\t" + lexer.lexeme + "\n";
+                    break;
+                case SpinCraneRight:
+                    resultado += "  <Método spinCraneRight>\t" + lexer.lexeme + "\n";
+                    break;
+                case MoveFowardCrane:
+                    resultado += "  <Método moveFowardCrane>\t" + lexer.lexeme + "\n";
+                    break;
+                case MoveBackCrane:
+                    resultado += "  <Método moveBackCrane>\t" + lexer.lexeme + "\n";
+                    break;
+                case SpinBallLeft:
+                    resultado += "  <Método spinBallLeft>\t" + lexer.lexeme + "\n";
+                    break;
+                case SpinBallRight:
+                    resultado += "  <Método spinBallRight>\t" + lexer.lexeme + "\n";
+                    break;
+                case HitToTheLeft:
+                    resultado += "  <Método hitToTheLeft>\t" + lexer.lexeme + "\n";
+                    break;
+                case HitToTheRight:
+                    resultado += "  <Método hitToTheRight>\t" + lexer.lexeme + "\n";
+                    break;
                 case Igual:
                     resultado += "  <Operador igual>\t" + lexer.lexeme + "\n";
                     break;
@@ -146,8 +173,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 case Corchete_c:
                     resultado += "  <Corchete de cierre>\t" + lexer.lexeme + "\n";
                     break;
-                case Main:
-                    resultado += "  <Reservada main>\t" + lexer.lexeme + "\n";
+                case Start:
+                    resultado += "  <Reservada start>\t" + lexer.lexeme + "\n";
                     break;
                 case P_coma:
                     resultado += "  <Punto y coma>\t" + lexer.lexeme + "\n";
