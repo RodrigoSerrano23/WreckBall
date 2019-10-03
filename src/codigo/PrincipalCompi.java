@@ -38,31 +38,24 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class PrincipalCompi extends javax.swing.JFrame {
-    public static DefaultTableModel modelo;
- 
-    
+    DefaultTableModel modelo;
    
     private String dirNuevo="";
     private String nomNuevo="";
-    String resultado;
     
     public PrincipalCompi() {
         initComponents();
         modelo = (DefaultTableModel)jTable1.getModel();
         jTable1.setModel(modelo);
         
-        
         this.setLocationRelativeTo(null);
         this.setTitle("Compilador - WreckBall");
-        
     }
     
     private void analizarLexico() throws IOException{
-        int cont = 1;
-        
         String expr = (String) jtxtArea.getText();
         codigo.Lexer lexer = new codigo.Lexer(new StringReader(expr));
-        resultado = "LINEA " + cont + "\t\tSIMBOLO\n";
+        
         while (true) {
             Tokens token = lexer.yylex();
             if (token == null) {
@@ -71,125 +64,125 @@ public class PrincipalCompi extends javax.swing.JFrame {
             }
             switch (token) {
                 case Linea:
-                    cont++;
-                    resultado += "LINEA " + cont + "\n";
+                    //cont++;
+                    //resultado += "LINEA " + cont + "\n";
                     break;
                 case Comillas:
-                    resultado += "  <Comillas>\t\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Comillas>",lexer.lexeme});
                     break;
                 case Cadena:
-                    resultado += "  <Tipo de dato>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Tipo de dato>",lexer.lexeme});
                     break;
                 case T_dato:
-                    resultado += "  <Tipo de dato>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Tipo de dato>",lexer.lexeme});
                     break;
                 case If:
-                    resultado += "  <Reservada if>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Reservada if>",lexer.lexeme});
                     break;
                 case Else:
-                    resultado += "  <Reservada else>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Reservada else>",lexer.lexeme});
                     break;
                 case Do:
-                    resultado += "  <Reservada do>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Reservada do>",lexer.lexeme});
                     break;
                 case While:
-                    resultado += "  <Reservada while>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Reservada while>",lexer.lexeme});
                     break;
                 case For:
-                    resultado += "  <Reservada while>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Reservada for>",lexer.lexeme});
                     break;
                 case StopLoop:
-                    resultado += "  <Reservada stopLoop>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Reservada stopLoop>",lexer.lexeme});
                     break;
                 case SpinCraneLeft:
-                    resultado += "  <Método spinCraneLeft>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Método spinCraneLeft>",lexer.lexeme});
                     break;
                 case SpinCraneRight:
-                    resultado += "  <Método spinCraneRight>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Método spinCraneRight>",lexer.lexeme});
                     break;
                 case MoveFowardCrane:
-                    resultado += "  <Método moveFowardCrane>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Método moveFowardCrane>",lexer.lexeme});
                     break;
                 case MoveBackCrane:
-                    resultado += "  <Método moveBackCrane>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Método moveBackCrane>",lexer.lexeme});
                     break;
                 case SpinBallLeft:
-                    resultado += "  <Método spinBallLeft>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Método spinBallLeft>",lexer.lexeme});
                     break;
                 case SpinBallRight:
-                    resultado += "  <Método spinBallRight>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Método spinBallRight>",lexer.lexeme});
                     break;
                 case HitToTheLeft:
-                    resultado += "  <Método hitToTheLeft>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Método hitToTheLeft>",lexer.lexeme});
                     break;
                 case HitToTheRight:
-                    resultado += "  <Método hitToTheRight>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Método hitToTheRight>",lexer.lexeme});
                     break;
                 case Igual:
-                    resultado += "  <Operador igual>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador igual>",lexer.lexeme});
                     break;
                 case Suma:
-                    resultado += "  <Operador suma>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador suma>",lexer.lexeme});
                     break;
                 case Resta:
-                    resultado += "  <Operador resta>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador resta>",lexer.lexeme});
                     break;
                 case Multiplicacion:
-                    resultado += "  <Operador multiplicacion>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador multiplicación>",lexer.lexeme});
                     break;
                 case Division:
-                    resultado += "  <Operador division>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador división>",lexer.lexeme});
                     break;
                 case Op_logico:
-                    resultado += "  <Operador logico>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador lógico>",lexer.lexeme});
                     break;
                 case Op_incremento:
-                    resultado += "  <Operador incremento>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador incremento/decremento>",lexer.lexeme});
                     break;
                 case Op_relacional:
-                    resultado += "  <Operador relacional>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador relacional>",lexer.lexeme});
                     break;
                 case Op_atribucion:
-                    resultado += "  <Operador atribucion>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador atribución>",lexer.lexeme});
                     break;
                 case Op_booleano:
-                    resultado += "  <Operador booleano>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Operador booleano>",lexer.lexeme});
                     break;
                 case Parentesis_a:
-                    resultado += "  <Parentesis de apertura>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Paréntesis de apertura>",lexer.lexeme});
                     break;
                 case Parentesis_c:
-                    resultado += "  <Parentesis de cierre>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Paréntesis de cierre>",lexer.lexeme});
                     break;
                 case Llave_a:
-                    resultado += "  <Llave de apertura>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Llave de apertura>",lexer.lexeme});
                     break;
                 case Llave_c:
-                    resultado += "  <Llave de cierre>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Llave de cierre>",lexer.lexeme});
                     break;
                 case Corchete_a:
-                    resultado += "  <Corchete de apertura>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Corchete de apertura>",lexer.lexeme});
                     break;
                 case Corchete_c:
-                    resultado += "  <Corchete de cierre>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Corchete de cierre>",lexer.lexeme});
                     break;
                 case Start:
-                    resultado += "  <Reservada start>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Reservada start>",lexer.lexeme});
                     break;
                 case P_coma:
-                    resultado += "  <Punto y coma>\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Punto y coma>",lexer.lexeme});
                     break;
                 case Identificador:
-                    resultado += "  <Identificador>\t\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Identificador>",lexer.lexeme});
                     break;
                 case Numero:
-                    resultado += "  <Numero>\t\t" + lexer.lexeme + "\n";
+                    modelo.addRow(new Object[] {"<Número>",lexer.lexeme});
                     break;
                 case ERROR:
-                    resultado += "  <Simbolo no definido>\n";
+                    modelo.addRow(new Object[] {"<Símbolo no definido>",lexer.lexeme});
                     break;
                 default:
-                    resultado += "  < " + lexer.lexeme + " >\n";
+                    modelo.addRow(new Object[] {null,lexer.lexeme});
                     break;
             }
         }
@@ -429,7 +422,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Nuevo nv=new Nuevo(this, true,this);
         //nv.show();
-        
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public boolean Guardar(){
@@ -450,6 +442,14 @@ public class PrincipalCompi extends javax.swing.JFrame {
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        String resultado;
+        int n=jTable1.getRowCount();
+        
+        while(n>0){
+            modelo.removeRow(n-1);
+            n--;
+        }
+        
         try {
             analizarLexico();
         } catch (IOException ex) {
@@ -461,14 +461,12 @@ public class PrincipalCompi extends javax.swing.JFrame {
         
         try {
             s.parse();
-            resultado+="\nAnalisis realizado correctamente";
+            resultado="\nAnalisis realizado correctamente";
             output.setText(resultado);
-            output.setForeground(new Color(25, 111, 61));
         } catch (Exception ex) {
             Symbol sym = s.getS();
-            resultado+="\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
+            resultado="\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
             output.setText(resultado);
-            output.setForeground(Color.red);
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
     
