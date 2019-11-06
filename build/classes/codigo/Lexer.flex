@@ -3,7 +3,7 @@ import static codigo.Tokens.*;
 %%
 %class Lexer
 %type Tokens
-L=[a-zA-Z_]+
+L=[_a-zA-Z]+
 D=[0-9]+
 espacio=[ ,\t,\r]+
 %{

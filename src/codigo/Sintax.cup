@@ -28,7 +28,8 @@ non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
 start with INICIO;
 
 INICIO ::= 
-    Start Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c
+    Start Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
+    Start Parentesis_a Parentesis_c Llave_a Llave_c
 ;
 SENTENCIA ::= 
     SENTENCIA DECLARACION |
@@ -45,7 +46,9 @@ SENTENCIA ::=
     FOR
 ;
 DECLARACION ::= 
-    T_dato Identificador P_coma | 
+    T_dato Identificador:c P_coma {:
+    PrincipalCompi.ci="(dec,"+c+", , )"
+    :}| 
     T_dato Identificador Op_atribucion Numero P_coma |
     T_dato Identificador Igual Numero P_coma |
     T_dato Identificador Op_incremento P_coma | 

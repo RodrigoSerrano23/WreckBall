@@ -43,6 +43,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private String dirNuevo="";
     private String nomNuevo="";
     
+    private static String ci="";
+    
     public PrincipalCompi() {
         initComponents();
         modelo = (DefaultTableModel)jTable1.getModel();
@@ -259,7 +261,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtxtArea);
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
