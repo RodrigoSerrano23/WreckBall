@@ -33,29 +33,123 @@ import java_cup.runtime.Symbol;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 
 
 
 
 public class PrincipalCompi extends javax.swing.JFrame {
     DefaultTableModel modelo;
-   
+    
+    DefaultStyledDocument doc;
+    final StyleContext cont = StyleContext.getDefaultStyleContext();
+    final AttributeSet red = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.RED);
+    final AttributeSet Black = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLACK);
+    final AttributeSet blue = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.blue);
+    final AttributeSet green = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.green);
+    final AttributeSet yellow = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.yellow);
+    final AttributeSet orange = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.orange);
+    
     private String dirNuevo="";
     private String nomNuevo="";
     
     private static String ci="";
     
     public PrincipalCompi() {
-        initComponents();
-        modelo = (DefaultTableModel)jTable1.getModel();
-        jTable1.setModel(modelo);
-        
         this.setLocationRelativeTo(null);
         this.setTitle("Compilador - WreckBall");
+        
+        doc = new DefaultStyledDocument() {
+
+            @Override
+            public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
+                super.insertString(offset, str, a);
+
+                String text = jTextPane1.getText(0, getLength());
+                int before = findLastNonWordChar(text, offset);
+                if (before < 0) {
+                    before = 0;
+                }
+                int after = findFirstNonWordChar(text, offset + str.length());
+                int wordL = before;
+                int wordR = before;
+
+                while (wordR <= after) {
+                    if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")) {
+
+                        if (text.substring(wordL, wordR).matches("(\\W)*(true|false|start)")) {
+                            setCharacterAttributes(wordL, wordR - wordL, orange, false);
+                        } else if (text.substring(wordL, wordR).matches("(\\W)*(if|else|do|while|for|stopLoop)")) {
+                            setCharacterAttributes(wordL, wordR - wordL, blue, false);
+                        } else if (text.substring(wordL, wordR).matches("(\\W)*(byte|int|char|long|float|double|String)")) {
+                            setCharacterAttributes(wordL, wordR - wordL, green, false);
+                        } else if (text.substring(wordL, wordR).matches("(\\W)*(spinCraneLeft|spinCraneRight|moveFowardCrane|moveBackCrane|spinBallLeft|spinBallRight|hitToTheLeft|hitToTheRight)")) {
+                            setCharacterAttributes(wordL, wordR - wordL, red, false);
+                        } else if (text.substring(wordL, wordR).matches("(\\W)*(\\Q) (\\W)* (\\E)")) {
+                            setCharacterAttributes(wordL, wordR - wordL, yellow, false);
+                        } else {
+                            setCharacterAttributes(wordL, wordR - wordL, Black, false);
+                        }
+
+                        wordL = wordR;
+                    }
+                    wordR++;
+                }
+            }
+
+            @Override
+            public void remove(int offs, int len) throws BadLocationException {
+                super.remove(offs, len);
+                String text = jTextPane1.getText(0, getLength());
+                int before = findLastNonWordChar(text, offs);
+                if (before < 0) {
+                    before = 0;
+                }
+                int after = findFirstNonWordChar(text, offs);
+
+                if (text.substring(before, after).matches("(\\W)*(true|false|start)")) {
+                    setCharacterAttributes(before, after - before, orange, false);
+                } else if (text.substring(before, after).matches("(\\W)*(if|else|do|while|for|stopLoop)")) {
+                    setCharacterAttributes(before, after - before, blue, false);
+                } else if (text.substring(before, after).matches("(\\W)*(byte|int|char|long|float|double|String)")) {
+                    setCharacterAttributes(before, after - before, green, false);
+                } else if (text.substring(before, after).matches("(\\W)*(spinCraneLeft|spinCraneRight|moveFowardCrane|moveBackCrane|spinBallLeft|spinBallRight|hitToTheLeft|hitToTheRight)")) {
+                    setCharacterAttributes(before, after - before, red, false);
+//                } else if (text.substring(before, after).matches("(\\W)*(>|<)")) {
+//                    setCharacterAttributes(before, after - before, yellow, false);
+                } else {
+                    setCharacterAttributes(before, after - before, Black, false);
+                }
+            }
+        };
+        initComponents();
+    }
+    
+    private int findLastNonWordChar(String text, int index) {
+        while (--index >= 0) {
+            if (String.valueOf(text.charAt(index)).matches("\\W")) {
+                break;
+            }
+        }
+        return index;
+    }
+    
+    private int findFirstNonWordChar(String text, int index) {
+        while (index < text.length()) {
+            if (String.valueOf(text.charAt(index)).matches("\\W")) {
+                break;
+            }
+            index++;
+        }
+        return index;
     }
     
     private void analizarLexico() throws IOException{
-        String expr = (String) jtxtArea.getText();
+        String expr = (String) jTextPane1.getText();
         codigo.Lexer lexer = new codigo.Lexer(new StringReader(expr));
         
         while (true) {
@@ -181,7 +275,17 @@ public class PrincipalCompi extends javax.swing.JFrame {
                     modelo.addRow(new Object[] {"<Número>",lexer.lexeme});
                     break;
                 case ERROR:
-                    modelo.addRow(new Object[] {"<Símbolo no definido>",lexer.lexeme});
+                    String ST = jTextPane1.getText();
+                    Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
+            {
+                try {
+                    s.parse();
+                } catch (Exception ex) {
+                    Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                    Symbol sym = s.getS();
+                    modelo.addRow(new Object[] {"<Símbolo no definido>",sym.value});
                     break;
                 default:
                     modelo.addRow(new Object[] {null,lexer.lexeme});
@@ -204,12 +308,11 @@ public class PrincipalCompi extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        lineCounter = new javax.swing.JTextArea();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtxtArea = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane(doc);
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -236,31 +339,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        lineCounter.setEditable(false);
-        lineCounter.setColumns(2);
-        lineCounter.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
-        lineCounter.setLineWrap(true);
-        lineCounter.setRows(2);
-        lineCounter.setTabSize(2);
-        lineCounter.setText("1");
-        lineCounter.setAutoscrolls(false);
-        lineCounter.setCaretColor(new java.awt.Color(51, 51, 255));
-        lineCounter.setFocusable(false);
-
-        jtxtArea.setColumns(20);
-        jtxtArea.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
-        jtxtArea.setLineWrap(true);
-        jtxtArea.setRows(5);
-        jtxtArea.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jtxtAreaKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtxtAreaKeyReleased(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jtxtArea);
-
         jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -278,19 +356,25 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        modelo = (DefaultTableModel)jTable1.getModel();
+        jTable1.setModel(modelo);
         jScrollPane4.setViewportView(jTable1);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Tabla de Tokens");
+
+        jTextPane1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        TextLineNumber lineas=new TextLineNumber(jTextPane1);
+        jScrollPane1.setRowHeaderView(lineas);
+        jScrollPane1.setViewportView(jTextPane1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(lineCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -302,15 +386,15 @@ public class PrincipalCompi extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lineCounter)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1))
         );
 
         jScrollPane3.setViewportView(jPanel1);
@@ -433,7 +517,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         try {
             out = new FileOutputStream(dirNuevo);
             p = new PrintStream(out);
-            p.println(this.jtxtArea.getText());
+            p.println(this.jTextPane1.getText());
             p.close();
             this.setTitle(this.getTitle().replace("*", ""));
             return true;
@@ -458,7 +542,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
             Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        String ST = jtxtArea.getText();
+        String ST = jTextPane1.getText();
         Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
         
         try {
@@ -472,13 +556,13 @@ public class PrincipalCompi extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
     
-    public void contarFilas(){
-        int totalrows=jtxtArea.getLineCount();
+    /*public void contarFilas(){
+        int totalrows=jTextPane1.getLineCount();
             lineCounter.setText("1\n");
             for(int i=2; i<=totalrows;i++){
                 lineCounter.setText(lineCounter.getText()+i+"\n");
             }
-    }
+    }*/
     
     public void llenarTabla(Vector v) {
         
@@ -505,18 +589,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
         //a.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jtxtAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtAreaKeyPressed
-        // TODO add your handling code here:
-        //output.setText("");
-    }//GEN-LAST:event_jtxtAreaKeyPressed
-
-    private void jtxtAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtAreaKeyReleased
-        // TODO add your handling code here:
-        if(evt.isControlDown() || evt.getKeyCode()==10 || evt.getKeyCode()==8 || evt.getKeyCode()==127){
-            contarFilas();
-        }
-    }//GEN-LAST:event_jtxtAreaKeyReleased
-
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem4ActionPerformed
@@ -538,8 +610,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
         this.nomNuevo=nomnovo;
         this.dirNuevo=dirnovo+nomNuevo+".wb";
         this.setTitle(this.getTitle()+" - "+dirNuevo);
-        jtxtArea.enable(true);
-        contarFilas();
+        jTextPane1.enable(true);
+        //contarFilas();
     }
     
     public void habilitarCampo(String dirnovo){
@@ -548,14 +620,14 @@ public class PrincipalCompi extends javax.swing.JFrame {
         try {
             FileInputStream fstream = new FileInputStream(dirNuevo);
             DataInputStream in = new DataInputStream(fstream);
-            this.jtxtArea.setText("");
+            this.jTextPane1.setText("");
             while (in.available() != 0) {
-                this.jtxtArea.setText(this.jtxtArea.getText() + in.readLine() + "\n");
+                this.jTextPane1.setText(this.jTextPane1.getText() + in.readLine() + "\n");
             }
             in.close();
             this.setTitle(this.getTitle()+" - "+dirNuevo);
-            jtxtArea.enable(true);
-            contarFilas();
+            jTextPane1.enable(true);
+            //contarFilas();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,"File input error");
         }
@@ -602,8 +674,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
-    private static javax.swing.JTextArea jtxtArea;
-    private javax.swing.JTextArea lineCounter;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextArea output;
     // End of variables declaration//GEN-END:variables
 }
