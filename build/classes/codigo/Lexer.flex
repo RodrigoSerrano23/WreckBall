@@ -24,10 +24,7 @@ espacio=[ ,\t,\r]+
 ( "\"" ) {lexeme=yytext(); return Comillas;}
 
 /* Tipos de datos */
-( byte | int | char | long | float | double ) {lexeme=yytext(); return T_dato;}
-
-/* Tipo de dato String */
-( String ) {lexeme=yytext(); return Cadena;}
+( int | bool ) {lexeme=yytext(); return T_dato;}
 
 /* Palabra reservada If */
 ( if ) {lexeme=yytext(); return If;}

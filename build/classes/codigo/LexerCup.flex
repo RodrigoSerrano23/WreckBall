@@ -30,10 +30,7 @@ espacio=[ ,\t,\r,\n]+
 ( "\"" ) {return new Symbol(sym.Comillas, yychar, yyline, yytext());}
 
 /* Tipos de datos */
-( byte | char | long | float | double | int ) {return new Symbol(sym.T_dato, yychar, yyline, yytext());}
-
-/* Tipo de dato String */
-( String ) {return new Symbol(sym.Cadena, yychar, yyline, yytext());}
+( int | bool ) {return new Symbol(sym.T_dato, yychar, yyline, yytext());}
 
 /* Palabra reservada If */
 ( if ) {return new Symbol(sym.If, yychar, yyline, yytext());}

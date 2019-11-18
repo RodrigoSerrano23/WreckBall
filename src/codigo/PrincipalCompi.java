@@ -57,7 +57,23 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private String dirNuevo="";
     private String nomNuevo="";
     
-    private static String ci="";
+    public static String ci="";
+    public static String sentencia;
+    public static String declaracion;
+    public static String ifs;
+    public static String elses;
+    public static String s_arit;
+    public static String s_bool;
+    public static String whiles;
+    public static String dowhiles;
+    public static String fors;
+    public static String s_for;
+    public static String d_for;
+    
+    public static int temp;
+    public static int tempb;
+    public static int choice;
+    public static int loop;
     
     public PrincipalCompi() {
         this.setLocationRelativeTo(null);
@@ -528,6 +544,23 @@ public class PrincipalCompi extends javax.swing.JFrame {
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        
+    sentencia="";
+    declaracion="";
+    ifs="";
+    elses="";
+    s_arit="";
+    s_bool="";
+    whiles="";
+    dowhiles="";
+    fors="";
+    s_for="";
+    d_for="";
+    
+    temp=0;
+    choice=0;
+    loop=0;
+        
         String resultado;
         int n=jTable1.getRowCount();
         
@@ -548,6 +581,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         try {
             s.parse();
             resultado="\nAnalisis realizado correctamente";
+            javax.swing.JOptionPane.showMessageDialog(null,ci);
             output.setText(resultado);
         } catch (Exception ex) {
             Symbol sym = s.getS();

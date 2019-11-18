@@ -22,81 +22,338 @@ terminal Linea, Comillas, T_dato, Cadena, If, Else, Do, While, For, StopLoop,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Start, P_coma, Identificador,
     Numero, ERROR;
-non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
-    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR;
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, ELSE,
+    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_ARITMETICA, SENTENCIA_FOR;
 
 start with INICIO;
 
 INICIO ::= 
-    Start Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c |
+    Start Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.ci=PrincipalCompi.sentencia;
+    :}|
     Start Parentesis_a Parentesis_c Llave_a Llave_c
 ;
 SENTENCIA ::= 
-    SENTENCIA DECLARACION |
-    DECLARACION |
-    SENTENCIA IF | 
-    IF |
-    SENTENCIA IF_ELSE |
-    IF_ELSE |
-    SENTENCIA WHILE |
-    WHILE |
-    SENTENCIA DO_WHILE
-    DO_WHILE |
-    SENTENCIA FOR |
-    FOR
+    SENTENCIA DECLARACION {:
+    PrincipalCompi.sentencia=PrincipalCompi.sentencia+PrincipalCompi.declaracion;
+    PrincipalCompi.declaracion="";
+    :}|
+    DECLARACION {:
+    PrincipalCompi.sentencia=PrincipalCompi.declaracion;
+    PrincipalCompi.declaracion="";
+    :}|
+    SENTENCIA IF {:
+    PrincipalCompi.sentencia=PrincipalCompi.sentencia+PrincipalCompi.ifs;
+    PrincipalCompi.ifs="";
+    :}| 
+    IF {:
+    PrincipalCompi.sentencia=PrincipalCompi.ifs;
+    PrincipalCompi.ifs="";
+    :}|
+    SENTENCIA WHILE {:PrincipalCompi.sentencia=PrincipalCompi.sentencia+PrincipalCompi.whiles;
+    PrincipalCompi.whiles=""; :}|
+    WHILE {:
+    PrincipalCompi.sentencia=PrincipalCompi.whiles;
+    PrincipalCompi.whiles="";
+    :} |
+    SENTENCIA DO_WHILE {:
+    PrincipalCompi.sentencia=PrincipalCompi.sentencia+PrincipalCompi.dowhiles;
+    PrincipalCompi.dowhiles="";
+    :} |
+    DO_WHILE {:
+    PrincipalCompi.sentencia=PrincipalCompi.dowhiles;
+    PrincipalCompi.dowhiles="";
+    :} |
+    SENTENCIA FOR {:
+    PrincipalCompi.sentencia=PrincipalCompi.sentencia+PrincipalCompi.fors;
+    PrincipalCompi.fors="";
+    :} |
+    FOR {:
+    PrincipalCompi.sentencia=PrincipalCompi.fors;
+    PrincipalCompi.fors="";
+    :}
 ;
 DECLARACION ::= 
-    T_dato Identificador:c P_coma {:
-    PrincipalCompi.ci="(dec,"+c+", , )"
-    :}| 
-    T_dato Identificador Op_atribucion Numero P_coma |
-    T_dato Identificador Igual Numero P_coma |
-    T_dato Identificador Op_incremento P_coma | 
-    T_dato Op_incremento Identificador P_coma | 
-    Cadena Identificador Op_atribucion Comillas Comillas P_coma |
-    Cadena Identificador Igual Comillas Comillas P_coma |
-    Cadena Identificador Op_atribucion Comillas Identificador Comillas P_coma |
-    Cadena Identificador Igual Comillas Identificador Comillas P_coma |
-    SpinCraneLeft Parentesis_a Numero Parentesis_c P_coma |
-    SpinCraneLeft Parentesis_a Identificador Parentesis_c P_coma |
-    SpinCraneRight Parentesis_a Numero Parentesis_c P_coma |
-    SpinCraneRight Parentesis_a Identificador Parentesis_c P_coma |
-    MoveFowardCrane Parentesis_a Numero Parentesis_c P_coma |
-    MoveFowardCrane Parentesis_a Identificador Parentesis_c P_coma |
-    MoveBackCrane Parentesis_a Numero Parentesis_c P_coma |
-    MoveBackCrane Parentesis_a Identificador Parentesis_c P_coma |
-    SpinBallLeft Parentesis_a Numero Parentesis_c P_coma |
-    SpinBallLeft Parentesis_a Identificador Parentesis_c P_coma |
-    SpinBallRight Parentesis_a Numero Parentesis_c P_coma |
-    SpinBallRight Parentesis_a Identificador Parentesis_c P_coma |
-    HitToTheLeft Parentesis_a Parentesis_c P_coma |
-    HitToTheRight Parentesis_a Parentesis_c P_coma |
-    StopLoop P_coma
+    T_dato:t Identificador:i P_coma {:
+    PrincipalCompi.declaracion="("+t+", , ,"+i+")\n";
+    :} | 
+    T_dato:t Identificador:i Op_atribucion:o Numero:n P_coma {:
+    PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+o+","+n+", ,"+i+")\n";
+    :} | 
+    T_dato:t Identificador:i Igual:g SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.declaracion="("+t+", , ,"+i+")\n"+PrincipalCompi.s_arit+"("+g+",TA"+PrincipalCompi.temp+", ,"+i+")\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_arit="";
+    :} |
+    Identificador:i Igual:g SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+g+",TA"+PrincipalCompi.temp+", ,"+i+")\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_arit=""; :} |
+    T_dato:t Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma {:
+    PrincipalCompi.declaracion="("+t+", , ,"+i+")\n"+PrincipalCompi.s_bool+"("+g+",TB"+PrincipalCompi.temp+", ,"+i+")\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_bool="";
+    :} |
+    Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma {:
+    PrincipalCompi.declaracion=PrincipalCompi.s_bool+"("+g+",TB"+PrincipalCompi.temp+", ,"+i+")\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_bool="";
+    :} |
+    Identificador:i Op_incremento:o P_coma {:
+    PrincipalCompi.declaracion="("+o+", , ,"+i+")\n";
+    :} |
+    T_dato:t Identificador:i Igual:g Numero:n P_coma{:
+    PrincipalCompi.sentencia="("+t+", , ,"+i+")\n("+g+","+n+", ,"+i+")\n";
+    :} |
+    Identificador:i Igual:g Numero:n P_coma{:
+    PrincipalCompi.sentencia="("+g+","+n+", ,"+i+")\n";
+    :} |
+    T_dato:t Identificador:i Igual:g Op_booleano:o P_coma{:
+    PrincipalCompi.sentencia="("+t+", , ,"+i+")\n("+g+","+o+", ,"+i+")\n";
+    :} |
+    Identificador:i Igual:g Op_booleano:o P_coma{:
+    PrincipalCompi.sentencia="("+g+","+o+", ,"+i+")\n";
+    :} |
+    SpinCraneLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_arit="";
+    :} |
+    SpinCraneLeft:a Parentesis_a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    SpinCraneLeft:a Parentesis_a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    SpinCraneRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_arit="";
+    :} |
+    SpinCraneRight:a Parentesis_a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    SpinCraneRight:a Parentesis_a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    MoveFowardCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_arit="";
+    :} |
+    MoveFowardCrane:a Parentesis_a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    MoveFowardCrane:a Parentesis_a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    MoveBackCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_arit="";
+    :} |
+    MoveBackCrane:a Parentesis_a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    MoveBackCrane:a Parentesis_a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    SpinBallLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_arit="";
+    :} |
+    SpinBallLeft:a Parentesis_a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    SpinBallLeft:a Parentesis_a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    SpinBallRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_arit="";
+    :} |
+    SpinBallRight:a Parentesis_a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    SpinBallRight:a Parentesis_a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    HitToTheLeft:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+", , , )\n";
+    :} |
+    HitToTheRight:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+", , , )\n";
+    :} |
+    StopLoop P_coma {:
+    PrincipalCompi.declaracion="(jmp loop"+PrincipalCompi.loop+":, , , )\n";
+    :}
 ;
-IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.ifs=PrincipalCompi.s_bool+"(iff,TB"+PrincipalCompi.tempb+", ,TB"+(PrincipalCompi.tempb+1)+")\n";
+    PrincipalCompi.tempb++;
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jnz choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.tempb++;
+    PrincipalCompi.sentencia=PrincipalCompi.s_bool="";
+    :}|
+    If Parentesis_a Op_booleano:o Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.ifs=PrincipalCompi.s_bool+"(iff,"+o+", ,TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jnz choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.tempb++;
+    PrincipalCompi.sentencia=PrincipalCompi.s_bool="";
+    :}|
+    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c ELSE {:
+    PrincipalCompi.ifs=PrincipalCompi.s_bool+"(iff,TB"+PrincipalCompi.tempb+", ,TB"+(PrincipalCompi.tempb+1)+")\n";
+    PrincipalCompi.tempb++;
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jnz choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.tempb++;
+    PrincipalCompi.choice++;
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jmp choice"+PrincipalCompi.choice+":, , , )\n"+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.sentencia=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    :}|
+    If Parentesis_a Op_booleano:o Parentesis_c Llave_a SENTENCIA Llave_c ELSE {:
+    PrincipalCompi.ifs=PrincipalCompi.s_bool+"(iff,"+o+", ,TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jnz choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.tempb++;
+    PrincipalCompi.choice++;
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jmp choice"+PrincipalCompi.choice+":, , , )\n"+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.sentencia=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    :}
 ;
-SENTENCIA_BOOLEANA ::= 
-    Op_booleano | 
-    Identificador Op_relacional Op_booleano |
-    Identificador Op_relacional Numero |
-    Identificador Op_relacional Identificador |
-    Identificador Op_relacional Comillas Comillas |
-    Identificador Op_relacional Comillas Identificador Comillas
+ELSE ::=Else Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.elses=PrincipalCompi.sentencia;
+    :}
 ;
-IF_ELSE ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c Else Llave_a SENTENCIA Llave_c
+SENTENCIA_BOOLEANA ::=  
+    Identificador:i Op_relacional:o Op_booleano:b {:
+    PrincipalCompi.s_bool="("+o+","+i+","+b+",TB"+PrincipalCompi.tempb+")\n";
+    :}|
+    Op_booleano:b Op_relacional:o Identificador:i {:
+    PrincipalCompi.s_bool="("+o+","+b+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    :}|
+    Identificador:i Op_relacional:o SENTENCIA_ARITMETICA {:
+    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+i+",TA"+PrincipalCompi.temp+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.temp++;
+    :}|
+    SENTENCIA_ARITMETICA Op_relacional:o Identificador:i {:
+    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+",TA"+PrincipalCompi.temp+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.temp++;
+    :}|
+    Identificador:i Op_relacional:o Identificador:n {:
+    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
+    :}
 ;
-WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
+SENTENCIA_ARITMETICA ::=
+    Numero:n Suma:s Numero:i {:
+    PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Identificador:i Suma:s Numero:n {:
+    PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Numero:n Suma:s Identificador:i {:
+    PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Identificador:i Suma:s Identificador:n {:
+    PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Numero:n Resta:s Numero:i {:
+    PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Identificador:i Resta:s Numero:n {:
+    PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Numero:n Resta:s Identificador:i {:
+    PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Identificador:i Resta:s Identificador:n {:
+    PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Numero:n Multiplicacion:s Numero:i {:
+    PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Identificador:i Multiplicacion:s Numero:n {:
+    PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Numero:n Multiplicacion:s Identificador:i {:
+    PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Identificador:i Multiplicacion:s Identificador:n {:
+    PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Numero:n Division:s Numero:i {:
+    PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Identificador:i Division:s Numero:n {:
+    PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Numero:n Division:s Identificador:i {:
+    PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    :} |
+    Identificador:i Division:s Identificador:n {:
+    PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    :}
 ;
-DO_WHILE ::= Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma
+WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.s_bool+"(jnz loop"+PrincipalCompi.loop+":,TB"+PrincipalCompi.tempb+", , )\n";
+    PrincipalCompi.whiles=PrincipalCompi.whiles+PrincipalCompi.sentencia+"(jmp startloop"+PrincipalCompi.loop+":, , , )\nloop"+PrincipalCompi.loop+":\n";
+    PrincipalCompi.loop++;
+    PrincipalCompi.tempb++;
+    PrincipalCompi.s_bool=PrincipalCompi.sentencia="";
+    :} |
+    While Parentesis_a Op_booleano:o Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+"(jnz loop"+PrincipalCompi.loop+":,"+o+", , )\n";
+    PrincipalCompi.whiles=PrincipalCompi.whiles+PrincipalCompi.sentencia+"(jmp startloop"+PrincipalCompi.loop+":, , , )\nloop"+PrincipalCompi.loop+":\n";
+    PrincipalCompi.loop++;
+    PrincipalCompi.s_bool=PrincipalCompi.sentencia="";
+    :} |
+    While Parentesis_a Identificador:o Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+"(jnz loop"+PrincipalCompi.loop+":,"+o+", , )\n";
+    PrincipalCompi.whiles=PrincipalCompi.whiles+PrincipalCompi.sentencia+"(jmp startloop"+PrincipalCompi.loop+":, , , )\nloop"+PrincipalCompi.loop+":\n";
+    PrincipalCompi.loop++;
+    PrincipalCompi.s_bool=PrincipalCompi.sentencia="";
+    :}
 ;
-FOR ::= For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c
+DO_WHILE ::= Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma {:
+    PrincipalCompi.dowhiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.sentencia+PrincipalCompi.s_bool;
+    PrincipalCompi.dowhiles=PrincipalCompi.dowhiles+"(jz startloop"+PrincipalCompi.loop+":,TB"+PrincipalCompi.tempb+", , )\nloop"+PrincipalCompi.loop+":\n";
+    PrincipalCompi.tempb++;
+    PrincipalCompi.loop++;
+    PrincipalCompi.sentencia=PrincipalCompi.s_bool="";
+    :} |
+    Do Llave_a SENTENCIA Llave_c While Parentesis_a Op_booleano:o Parentesis_c P_coma {:
+    PrincipalCompi.dowhiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.sentencia;
+    PrincipalCompi.dowhiles=PrincipalCompi.dowhiles+"(jz startloop"+PrincipalCompi.loop+":,"+o+", , )\nloop"+PrincipalCompi.loop+":\n";
+    PrincipalCompi.loop++;
+    PrincipalCompi.sentencia="";
+    :} |
+    Do Llave_a SENTENCIA Llave_c While Parentesis_a Identificador:o Parentesis_c P_coma {:
+    PrincipalCompi.dowhiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.sentencia;
+    PrincipalCompi.dowhiles=PrincipalCompi.dowhiles+"(jz startloop"+PrincipalCompi.loop+":,"+o+", , )\nloop"+PrincipalCompi.loop+":\n";
+    PrincipalCompi.loop++;
+    PrincipalCompi.sentencia="";
+    :}
+    
+;
+FOR ::= For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.fors=PrincipalCompi.s_for+PrincipalCompi.sentencia+PrincipalCompi.d_for+"loop"+PrincipalCompi.loop+":\n";
+    :}
 ;
 SENTENCIA_FOR ::=
-    T_dato Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR |
-    Identificador Igual Numero P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR
+    T_dato:t Identificador:i Igual:g Numero:n P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR {:
+    PrincipalCompi.s_for="("+t+", , ,"+i+")\n("+g+","+n+", ,"+i+")\nstartloop"+PrincipalCompi.loop+":\n";
+    PrincipalCompi.s_for=PrincipalCompi.s_bool+"(iff,TB"+PrincipalCompi.tempb+", , )\n(jnz loop"+PrincipalCompi.loop+":, , , )\n";
+    :} |
+    Identificador:i Igual:g Numero:n P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR {:
+    PrincipalCompi.s_for="("+g+","+n+", ,"+i+")\nstartloop"+PrincipalCompi.loop+":\n";
+    PrincipalCompi.s_for=PrincipalCompi.s_bool+"(iff,TB"+PrincipalCompi.tempb+", , )\n(jnz loop"+PrincipalCompi.loop+":, , , )\n";
+    :}
 ;
 DECLARACION_FOR ::= 
-    Identificador Op_atribucion Numero |
-    Identificador Op_incremento | 
-    Op_incremento Identificador
+    Identificador:i Op_atribucion:o Numero:n {:
+    PrincipalCompi.d_for="("+o+","+n+", ,"+i+")\n";
+    :}|
+    Identificador:i Op_incremento:o {:
+    PrincipalCompi.d_for="("+o+", , ,"+i+")\n";
+    :}
 ;
