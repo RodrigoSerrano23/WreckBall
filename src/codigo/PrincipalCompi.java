@@ -58,7 +58,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private String nomNuevo="";
     
     public static String ci="";
-    public static String sentencia;
+    public static String sentencia[]=new String[36];
     public static String declaracion;
     public static String ifs;
     public static String elses;
@@ -72,6 +72,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     
     public static int temp;
     public static int tempb;
+    public static int status;
     public static int choice;
     public static int loop;
     
@@ -544,8 +545,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        
-    sentencia="";
+    for(int i=0;i<=35;i++){    
+    sentencia[i]="";}
     declaracion="";
     ifs="";
     elses="";
@@ -557,6 +558,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     s_for="";
     d_for="";
     
+    status=0;
     temp=0;
     choice=0;
     loop=0;
