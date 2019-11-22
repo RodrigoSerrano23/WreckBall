@@ -30,6 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.Lexer;
 import java_cup.runtime.Symbol;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -77,9 +78,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
     public static int loop;
     
     public PrincipalCompi() {
-        this.setLocationRelativeTo(null);
-        this.setTitle("Compilador - WreckBall");
-        
         doc = new DefaultStyledDocument() {
 
             @Override
@@ -102,9 +100,9 @@ public class PrincipalCompi extends javax.swing.JFrame {
                             setCharacterAttributes(wordL, wordR - wordL, orange, false);
                         } else if (text.substring(wordL, wordR).matches("(\\W)*(if|else|do|while|for|stopLoop)")) {
                             setCharacterAttributes(wordL, wordR - wordL, blue, false);
-                        } else if (text.substring(wordL, wordR).matches("(\\W)*(byte|int|char|long|float|double|String)")) {
+                        } else if (text.substring(wordL, wordR).matches("(\\W)*(byte|int|char|long|float|double|String|bool)")) {
                             setCharacterAttributes(wordL, wordR - wordL, green, false);
-                        } else if (text.substring(wordL, wordR).matches("(\\W)*(spinCraneLeft|spinCraneRight|moveFowardCrane|moveBackCrane|spinBallLeft|spinBallRight|hitToTheLeft|hitToTheRight)")) {
+                        } else if (text.substring(wordL, wordR).matches("(\\W)*(spinCraneLeft|spinCraneRight|moveFowardCrane|moveBackCrane|spinBallLeft|spinBallRight|hitToTheLeft|hitToTheRight|waitTime)")) {
                             setCharacterAttributes(wordL, wordR - wordL, red, false);
                         } else if (text.substring(wordL, wordR).matches("(\\W)*(\\Q) (\\W)* (\\E)")) {
                             setCharacterAttributes(wordL, wordR - wordL, yellow, false);
@@ -132,9 +130,9 @@ public class PrincipalCompi extends javax.swing.JFrame {
                     setCharacterAttributes(before, after - before, orange, false);
                 } else if (text.substring(before, after).matches("(\\W)*(if|else|do|while|for|stopLoop)")) {
                     setCharacterAttributes(before, after - before, blue, false);
-                } else if (text.substring(before, after).matches("(\\W)*(byte|int|char|long|float|double|String)")) {
+                } else if (text.substring(before, after).matches("(\\W)*(byte|int|char|long|float|double|String|bool)")) {
                     setCharacterAttributes(before, after - before, green, false);
-                } else if (text.substring(before, after).matches("(\\W)*(spinCraneLeft|spinCraneRight|moveFowardCrane|moveBackCrane|spinBallLeft|spinBallRight|hitToTheLeft|hitToTheRight)")) {
+                } else if (text.substring(before, after).matches("(\\W)*(spinCraneLeft|spinCraneRight|moveFowardCrane|moveBackCrane|spinBallLeft|spinBallRight|hitToTheLeft|hitToTheRight|waitTime)")) {
                     setCharacterAttributes(before, after - before, red, false);
 //                } else if (text.substring(before, after).matches("(\\W)*(>|<)")) {
 //                    setCharacterAttributes(before, after - before, yellow, false);
@@ -144,6 +142,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
             }
         };
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.setTitle("Compilador - WreckBall");
     }
     
     private int findLastNonWordChar(String text, int index) {
@@ -320,8 +320,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        output = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -330,6 +328,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane(doc);
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -343,14 +343,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        output.setColumns(20);
-        output.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
-        output.setForeground(new java.awt.Color(51, 204, 0));
-        output.setRows(5);
-        output.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        output.setEnabled(false);
-        jScrollPane2.setViewportView(output);
 
         jLabel2.setText("Output:");
 
@@ -415,6 +407,13 @@ public class PrincipalCompi extends javax.swing.JFrame {
         );
 
         jScrollPane3.setViewportView(jPanel1);
+
+        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {  };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane6.setViewportView(jList2);
 
         jMenu1.setText("Archivo");
 
@@ -504,7 +503,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane6))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -514,7 +513,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane6)
                 .addContainerGap())
         );
 
@@ -525,6 +524,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Nuevo nv=new Nuevo(this, true,this);
         //nv.show();
+        String[] array=new String[]{"Item 1","Item 2","Item 3"};
+        jList2.setListData(array);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public boolean Guardar(){
@@ -584,11 +585,11 @@ public class PrincipalCompi extends javax.swing.JFrame {
             s.parse();
             resultado="\nAnalisis realizado correctamente";
             javax.swing.JOptionPane.showMessageDialog(null,ci);
-            output.setText(resultado);
+            //output.setText(resultado);
         } catch (Exception ex) {
             Symbol sym = s.getS();
             resultado="\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
-            output.setText(resultado);
+            //output.setText(resultado);
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
     
@@ -693,6 +694,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JList<String> jList2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -706,11 +708,10 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JTextArea output;
     // End of variables declaration//GEN-END:variables
 }
