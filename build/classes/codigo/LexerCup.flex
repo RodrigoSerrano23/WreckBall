@@ -29,11 +29,17 @@ espacio=[ ,\t,\r,\n]+
 /* Comillas */
 ( "\"" ) {return new Symbol(sym.Comillas, yychar, yyline, yytext());}
 
-/* Tipos de datos */
-( int | bool ) {return new Symbol(sym.T_dato, yychar, yyline, yytext());}
+/* Tipos de dato entero */
+( int ) {return new Symbol(sym.Int, yychar, yyline, yytext());}
+
+/* Tipos de dato entero */
+( bool ) {return new Symbol(sym.Bool, yychar, yyline, yytext());}
 
 /* Palabra reservada If */
 ( if ) {return new Symbol(sym.If, yychar, yyline, yytext());}
+
+/* Método WaitTime */
+( waitTime ) {return new Symbol(sym.WaitTime, yychar, yyline, yytext());}
 
 /* Palabra reservada Else */
 ( else ) {return new Symbol(sym.Else, yychar, yyline, yytext());}
@@ -96,7 +102,7 @@ espacio=[ ,\t,\r,\n]+
 ( ">" | "<" | "==" | "!=" | ">=" | "<=" | "<<" | ">>" ) {return new Symbol(sym.Op_relacional, yychar, yyline, yytext());}
 
 /* Operadores Atribucion */
-( "+=" | "-="  | "*=" | "/=" | "%=" | "=" ) {return new Symbol(sym.Op_atribucion, yychar, yyline, yytext());}
+( "+=" | "-="  | "*=" | "/=" | "%=" ) {return new Symbol(sym.Op_atribucion, yychar, yyline, yytext());}
 
 /* Operadores Incremento y decremento */
 ( "++" | "--" ) {return new Symbol(sym.Op_incremento, yychar, yyline, yytext());}
@@ -133,6 +139,7 @@ espacio=[ ,\t,\r,\n]+
 
 /* Numero */
 ("(-"{D}+")")|{D}+ {return new Symbol(sym.Numero, yychar, yyline, yytext());}
+
 
 /* Error de analisis */
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}

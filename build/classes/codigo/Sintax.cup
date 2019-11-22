@@ -15,13 +15,13 @@ parser code
 }
 :};
 
-terminal Linea, Comillas, T_dato, Cadena, If, Else, Do, While, For, StopLoop,
+terminal Linea, Comillas, Int, Bool, Cadena, If, Else, Do, While, For, StopLoop,
     SpinCraneLeft, SpinCraneRight, MoveFowardCrane, MoveBackCrane,
     SpinBallLeft, SpinBallRight, HitToTheLeft, HitToTheRight,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
     Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Start, P_coma, Identificador,
-    Numero, ERROR;
+    Numero, WaitTime, ERROR;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_ARITMETICA, SENTENCIA_FOR;
 
@@ -92,13 +92,22 @@ SENTENCIA ::=
     :}
 ;
 DECLARACION ::= 
-    T_dato:t Identificador:i P_coma {:
+    Int:t Identificador:i P_coma {:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n";
-    :} | 
-    T_dato:t Identificador:i Op_atribucion:o Numero:n P_coma {:
-    PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+o+","+n+", ,"+i+")\n";
-    :} | 
-    T_dato:t Identificador:i Igual:g SENTENCIA_ARITMETICA P_coma {:
+    :} |
+    Bool:t Identificador:i P_coma {:
+    PrincipalCompi.declaracion="("+t+", , ,"+i+")\n";
+    :} |
+    Int:t Identificador:i Igual:g Identificador:l P_coma {:
+    PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+l+", ,"+i+")\n";
+    :} |
+    Bool:t Identificador:i Igual:g Identificador:l P_coma {:
+    PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+l+", ,"+i+")\n";
+    :} |
+    Identificador:a Igual:g Identificador:b P_coma {:
+    PrincipalCompi.declaracion="("+g+","+b+", ,"+a+")";
+    :}|
+    Int:t Identificador:i Igual:g SENTENCIA_ARITMETICA P_coma {:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n"+PrincipalCompi.s_arit+"("+g+",TA"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
@@ -107,7 +116,7 @@ DECLARACION ::=
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+g+",TA"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit=""; :} |
-    T_dato:t Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma {:
+    Bool:t Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma {:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n"+PrincipalCompi.s_bool+"("+g+",TB"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_bool="";
@@ -120,13 +129,13 @@ DECLARACION ::=
     Identificador:i Op_incremento:o P_coma {:
     PrincipalCompi.declaracion="("+o+", , ,"+i+")\n";
     :} |
-    T_dato:t Identificador:i Igual:g Numero:n P_coma{:
+    Int:t Identificador:i Igual:g Numero:n P_coma{:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+n+", ,"+i+")\n";
     :} |
     Identificador:i Igual:g Numero:n P_coma{:
     PrincipalCompi.declaracion="("+g+","+n+", ,"+i+")\n";
     :} |
-    T_dato:t Identificador:i Igual:g Op_booleano:o P_coma{:
+    Bool:t Identificador:i Igual:g Op_booleano:o P_coma{:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+o+", ,"+i+")\n";
     :} |
     Identificador:i Igual:g Op_booleano:o P_coma{:
@@ -206,7 +215,19 @@ DECLARACION ::=
     :} |
     StopLoop P_coma {:
     PrincipalCompi.declaracion="(jmp loop"+PrincipalCompi.loop+":, , , )\n";
-    :}
+    :} |
+    WaitTime:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
+    PrincipalCompi.temp++;
+    PrincipalCompi.s_arit="";
+    :} |
+    WaitTime:a Parentesis_a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} |
+    WaitTime:a Parentesis_a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    :} 
+    
 ;
 IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
@@ -373,7 +394,7 @@ FOR ::= For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c {:
     :}
 ;
 SENTENCIA_FOR ::=
-    T_dato:t Identificador:i Igual:g Numero:n P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR {:
+    Int:t Identificador:i Igual:g Numero:n P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR {:
     PrincipalCompi.s_for="("+t+", , ,"+i+")\n("+g+","+n+", ,"+i+")\nstartloop"+PrincipalCompi.loop+":\n";
     PrincipalCompi.s_for=PrincipalCompi.s_bool+"(iff,TB"+PrincipalCompi.tempb+", , )\n(jnz loop"+PrincipalCompi.loop+":, , , )\n";
     :} |

@@ -25,6 +25,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,6 +77,10 @@ public class PrincipalCompi extends javax.swing.JFrame {
     public static int status;
     public static int choice;
     public static int loop;
+    
+    public static ArrayList<Simbolo> tabla_simbolos;
+    
+    public static String error_semantico;
     
     public PrincipalCompi() {
         doc = new DefaultStyledDocument() {
@@ -186,8 +191,11 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 case Cadena:
                     modelo.addRow(new Object[] {"<Tipo de dato>",lexer.lexeme});
                     break;
-                case T_dato:
-                    modelo.addRow(new Object[] {"<Tipo de dato>",lexer.lexeme});
+                case Int:
+                    modelo.addRow(new Object[] {"<Tipo de dato entero>",lexer.lexeme});
+                    break;
+                case Bool:
+                    modelo.addRow(new Object[] {"<Tipo de dato booleano>",lexer.lexeme});
                     break;
                 case If:
                     modelo.addRow(new Object[] {"<Reservada if>",lexer.lexeme});
@@ -546,8 +554,10 @@ public class PrincipalCompi extends javax.swing.JFrame {
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    tabla_simbolos.clear();
     for(int i=0;i<=35;i++){    
-    sentencia[i]="";}
+        sentencia[i]="";
+    }
     declaracion="";
     ifs="";
     elses="";
@@ -558,7 +568,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     fors="";
     s_for="";
     d_for="";
-    
+    error_semantico="";
     status=0;
     temp=0;
     choice=0;
@@ -591,6 +601,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
             resultado="\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
             //output.setText(resultado);
         }
+        
     }//GEN-LAST:event_jMenuItem3ActionPerformed
     
     /*public void contarFilas(){

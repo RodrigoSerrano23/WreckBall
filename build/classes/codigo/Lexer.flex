@@ -23,8 +23,11 @@ espacio=[ ,\t,\r]+
 /* Comillas */
 ( "\"" ) {lexeme=yytext(); return Comillas;}
 
-/* Tipos de datos */
-( int | bool ) {lexeme=yytext(); return T_dato;}
+/* Tipo de datos entero*/
+( int ) {lexeme=yytext(); return Int;}
+
+/* Tipo de datos booleano*/
+( bool) {lexeme=yytext(); return Bool;}
 
 /* Palabra reservada If */
 ( if ) {lexeme=yytext(); return If;}
@@ -94,6 +97,9 @@ espacio=[ ,\t,\r]+
 
 /* Operadores Incremento y decremento */
 ( "++" | "--" ) {lexeme = yytext(); return Op_incremento;}
+
+/* Método WaitTime */
+( waitTime ) {lexeme=yytext(); return WaitTime;}
 
 /*Operadores Booleanos*/
 (true | false)      {lexeme = yytext(); return Op_booleano;}
