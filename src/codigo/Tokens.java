@@ -12,7 +12,8 @@ package codigo;
 public enum Tokens {
     Linea,
     Comillas,
-    T_dato,
+    Int,
+    Bool,
     Cadena,
     If,
     Else,
@@ -28,6 +29,7 @@ public enum Tokens {
     SpinBallRight,
     HitToTheLeft,
     HitToTheRight,
+    WaitTime,
     Igual,
     Suma,
     Resta,
