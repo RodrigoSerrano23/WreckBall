@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import java_cup.Lexer;
 import java_cup.runtime.Symbol;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -45,6 +46,12 @@ import javax.swing.text.StyleContext;
 
 
 public class PrincipalCompi extends javax.swing.JFrame {
+    
+    JFileChooser seleccionado = new JFileChooser();
+    File archivo;
+    byte[] bytesImg;
+    GestionA gestion = new GestionA();
+    
     DefaultTableModel modelo;
     
     DefaultStyledDocument doc;
@@ -534,6 +541,21 @@ public class PrincipalCompi extends javax.swing.JFrame {
         //nv.show();
         String[] array=new String[]{"Item 1","Item 2","Item 3"};
         jList2.setListData(array);
+        
+        if(seleccionado.showDialog(null, "Guardar") == JFileChooser.APPROVE_OPTION){
+            archivo = seleccionado.getSelectedFile();
+            if(archivo.getName().endsWith("txt")){
+                String contenido = jTextPane1.getText();
+                String respuesta = gestion.GuardarATexto(archivo, contenido);
+                if(respuesta!=null){
+                    JOptionPane.showMessageDialog(null, respuesta);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Error al guardar codigo.");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "El texto se debe guardar en un formato de texto.");
+            }
+        }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public boolean Guardar(){
@@ -635,6 +657,17 @@ public class PrincipalCompi extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Abrir a=new Abrir(this, true, this);
         //a.setVisible(true);
+        if(seleccionado.showDialog(null, "Abrir") == JFileChooser.APPROVE_OPTION){
+            archivo = seleccionado.getSelectedFile();
+            if(archivo.canRead()){
+                if(archivo.getName().endsWith("txt")){
+                    String contenido = gestion.AbrirATexto(archivo);
+                    jTextPane1.setText(contenido);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Por favor seleccione un archivo de texto");
+                    }
+                }
+            }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
