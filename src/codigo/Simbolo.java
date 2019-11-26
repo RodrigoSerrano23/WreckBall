@@ -10,25 +10,29 @@ package codigo;
  * @author ClownToy
  */
 public class Simbolo {
-    private String nombre;
-    private String tipo;
-    private String valor;
+    private Object nombre;
+    private Object tipo;
+    private Object valor;
     
-    public Simbolo(String n,String t){
+    public Simbolo(Object n,Object t,Object v){
         nombre=n;
         tipo=t;
-        valor="";
+        valor=v;
     }
     
-  public String getNombre(){
+  public Object getNombre(){
       return nombre;
   }
   
-  public String getTipo(){
-      return nombre;
+  public Object getTipo(){
+      return tipo;
   }
   
-  public void setValor(String v){
+  public Object getValor(){
+      return valor;
+  }
+  
+  public void setValor(Object v){
       valor=v;
   }
     

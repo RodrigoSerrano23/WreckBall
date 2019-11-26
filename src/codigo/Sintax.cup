@@ -94,136 +94,631 @@ SENTENCIA ::=
 DECLARACION ::= 
     Int:t Identificador:i P_coma {:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n";
+    int n=0;
+    Simbolo temp=null;
+    Simbolo s=new Simbolo(i,t,null);
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.tabla_simbolos.add(s);
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                PrincipalCompi.err.add("Error semántico; el identificador "+i+" ya fue declarado anteriormente");
+                n++;
+                break;
+            }
+        }
+        if(n==0){
+            PrincipalCompi.tabla_simbolos.add(s);
+        }
+    }
     :} |
+
     Bool:t Identificador:i P_coma {:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n";
+    int n=0;
+    Simbolo temp=null;
+    Simbolo s=new Simbolo(i,t,null);
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.tabla_simbolos.add(s);
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                PrincipalCompi.err.add("Error semántico; el identificador "+i+" ya fue declarado anteriormente");
+                n++;
+                break;
+            }
+        }
+        if(n==0){
+            PrincipalCompi.tabla_simbolos.add(s);
+        }
+    }
     :} |
+
     Int:t Identificador:i Igual:g Identificador:l P_coma {:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+l+", ,"+i+")\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+l+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                n++;
+                PrincipalCompi.err.add("Error semántico; el identificador "+i+" ya fue declarado anteriormente");
+                break;
+            }else if(temp.getNombre().equals(l)){
+                if(temp.getTipo().equals(t)){
+                    if(temp.getValor()==null){
+                        n++;
+                        PrincipalCompi.err.add("Error semántico; el identificador "+l+" no ha sido inicializado");
+                        break;
+                    }else{
+                        n++;
+                        Object v=temp.getValor();
+                        Simbolo s=new Simbolo(i,t,v);
+                        PrincipalCompi.tabla_simbolos.add(s);
+                        break;
+                    }
+                }else{
+                    n++;
+                    PrincipalCompi.err.add("Error semántico; el valor de "+l+" no es de tipo int");
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+l+" no ha sido declarado");
+        }
+    }
     :} |
+
     Bool:t Identificador:i Igual:g Identificador:l P_coma {:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+l+", ,"+i+")\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+l+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                n++;
+                PrincipalCompi.err.add("Error semántico; el identificador "+i+" ya fue declarado anteriormente");
+                break;
+            }else if(temp.getNombre().equals(l)){
+                if(temp.getTipo().equals(t)){
+                    if(temp.getValor()==null){
+                        n++;
+                        PrincipalCompi.err.add("Error semántico; el identificador "+l+" no ha sido inicializado");
+                        break;
+                    }else{
+                        n++;
+                        Object v=temp.getValor();
+                        Simbolo s=new Simbolo(i,t,v);
+                        PrincipalCompi.tabla_simbolos.add(s);
+                        break;
+                    }
+                }else{
+                    n++;
+                    PrincipalCompi.err.add("Error semántico; el valor de "+l+" no es de tipo bool");
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+l+" no ha sido declarado");
+        }
+    }
     :} |
+
     Identificador:a Igual:g Identificador:b P_coma {:
     PrincipalCompi.declaracion="("+g+","+b+", ,"+a+")";
+    int n=0;
+    Simbolo s1=null;
+    Simbolo s2=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+a+" y "+b+" no han sido declarados");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            Simbolo temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(a)){
+                s1=temp;
+                for(int at=0;at<PrincipalCompi.tabla_simbolos.size();at++){
+                    Simbolo temp2=PrincipalCompi.tabla_simbolos.get(at);
+                    if(temp2.getNombre().equals(b)){
+                        s2=temp2;
+                        if(temp.getTipo().equals(temp2.getTipo())){
+                            if(temp2.getValor()==null){
+                                n++;
+                                PrincipalCompi.err.add("Error semántico; el identificador "+b+" no ha sido inicializado");
+                                break;
+                            }else{
+                                n++;
+                                Object v=temp2.getValor();
+                                temp.setValor(v);
+                                break;
+                            }
+                        }else{
+                            n++;
+                            PrincipalCompi.err.add("Error semántico; los tipos de dato de "+a+" y "+b+" son incompatibles");
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(n==0){
+            if(s1==null){
+                PrincipalCompi.err.add("Error semántico; el identificador "+a+" no ha sido declarado");
+            }
+            if(s2==null){
+                PrincipalCompi.err.add("Error semántico; el identificador "+b+" no ha sido declarado");
+            }
+        }
+    }
     :}|
+
     Int:t Identificador:i Igual:g SENTENCIA_ARITMETICA P_coma {:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n"+PrincipalCompi.s_arit+"("+g+",TA"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     :} |
+
     Identificador:i Igual:g SENTENCIA_ARITMETICA P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+g+",TA"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit=""; :} |
+
     Bool:t Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma {:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n"+PrincipalCompi.s_bool+"("+g+",TB"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_bool="";
     :} |
+
     Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_bool+"("+g+",TB"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_bool="";
     :} |
+
     Identificador:i Op_incremento:o P_coma {:
     PrincipalCompi.declaracion="("+o+", , ,"+i+")\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("int")){
+                    if(temp.getValor()==null){
+                        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido inicializado");
+                        n++;
+                        break;
+                    }else{
+                        int num=(int)temp.getValor();
+                        num++;
+                        temp.setValor(num);
+                        n++;
+                        break;
+                    }
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
+                    n++;
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     Int:t Identificador:i Igual:g Numero:n P_coma{:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+n+", ,"+i+")\n";
+    int num=0;
+    Simbolo s=new Simbolo(i,t,n);
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.tabla_simbolos.add(s);
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                PrincipalCompi.err.add("Error semántico; el identificador "+i+" ya fue declarado anteriormente");
+                num++;
+                break;
+            }
+        }
+        if(num==0){
+            PrincipalCompi.tabla_simbolos.add(s);
+        }
+    }
     :} |
+
     Identificador:i Igual:g Numero:n P_coma{:
     PrincipalCompi.declaracion="("+g+","+n+", ,"+i+")\n";
+    int num=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("int")){
+                    temp.setValor(n);
+                    num++;
+                    break;
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo entero");
+                    num++;
+                    break;
+                }
+            }
+        }
+        if(num==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     Bool:t Identificador:i Igual:g Op_booleano:o P_coma{:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+o+", ,"+i+")\n";
+    int num=0;
+    Simbolo s=new Simbolo(i,t,o);
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.tabla_simbolos.add(s);
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                PrincipalCompi.err.add("Error semántico; el identificador "+i+" ya fue declarado anteriormente");
+                num++;
+                break;
+            }
+        }
+        if(num==0){
+            PrincipalCompi.tabla_simbolos.add(s);
+        }
+    }
     :} |
+
     Identificador:i Igual:g Op_booleano:o P_coma{:
     PrincipalCompi.declaracion="("+g+","+o+", ,"+i+")\n";
+    int num=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("bool")){
+                    temp.setValor(o);
+                    num++;
+                    break;
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo bool");
+                    num++;
+                    break;
+                }
+            }
+        }
+        if(num==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     SpinCraneLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     :} |
+
     SpinCraneLeft:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("int")){
+                    if(temp.getValor()==null){
+                        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido inicializado");
+                        n++;
+                        break;
+                    }else{
+                        n++;
+                        break;
+                    }
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
+                    n++;
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     SpinCraneLeft:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
     :} |
+
     SpinCraneRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     :} |
+
     SpinCraneRight:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("int")){
+                    if(temp.getValor()==null){
+                        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido inicializado");
+                        n++;
+                        break;
+                    }else{
+                        n++;
+                        break;
+                    }
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
+                    n++;
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     SpinCraneRight:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
     :} |
+
     MoveFowardCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     :} |
+
     MoveFowardCrane:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("int")){
+                    if(temp.getValor()==null){
+                        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido inicializado");
+                        n++;
+                        break;
+                    }else{
+                        n++;
+                        break;
+                    }
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
+                    n++;
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     MoveFowardCrane:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
     :} |
+
     MoveBackCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     :} |
+
     MoveBackCrane:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("int")){
+                    if(temp.getValor()==null){
+                        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido inicializado");
+                        n++;
+                        break;
+                    }else{
+                        n++;
+                        break;
+                    }
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
+                    n++;
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     MoveBackCrane:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
     :} |
+
     SpinBallLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     :} |
+
     SpinBallLeft:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("int")){
+                    if(temp.getValor()==null){
+                        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido inicializado");
+                        n++;
+                        break;
+                    }else{
+                        n++;
+                        break;
+                    }
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
+                    n++;
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     SpinBallLeft:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
     :} |
+
     SpinBallRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     :} |
+
     SpinBallRight:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("int")){
+                    if(temp.getValor()==null){
+                        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido inicializado");
+                        n++;
+                        break;
+                    }else{
+                        n++;
+                        break;
+                    }
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
+                    n++;
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     SpinBallRight:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
     :} |
+
     HitToTheLeft:a Parentesis_a Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+", , , )\n";
     :} |
+
     HitToTheRight:a Parentesis_a Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+", , , )\n";
     :} |
+
     StopLoop P_coma {:
     PrincipalCompi.declaracion="(jmp loop"+PrincipalCompi.loop+":, , , )\n";
     :} |
+
     WaitTime:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     :} |
+
     WaitTime:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    int n=0;
+    Simbolo temp=null;
+    if(PrincipalCompi.tabla_simbolos.isEmpty()){
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+    }else{
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            temp=PrincipalCompi.tabla_simbolos.get(it);
+            if(temp.getNombre().equals(i)){
+                if(temp.getTipo().toString().equals("int")){
+                    if(temp.getValor()==null){
+                        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido inicializado");
+                        n++;
+                        break;
+                    }else{
+                        n++;
+                        break;
+                    }
+                }else{
+                    PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
+                    n++;
+                    break;
+                }
+            }
+        }
+        if(n==0){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+    }
     :} |
+
     WaitTime:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
     :} 
@@ -267,78 +762,458 @@ ELSE ::=Else Llave_a SENTENCIA Llave_c {:
 SENTENCIA_BOOLEANA ::=  
     Identificador:i Op_relacional:o Op_booleano:b {:
     PrincipalCompi.s_bool="("+o+","+i+","+b+",TB"+PrincipalCompi.tempb+")\n";
+    Simbolo a=null;
+    for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+        if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre())){
+            a=PrincipalCompi.tabla_simbolos.get(it);
+        }
+    }
+    if(a==null){
+        
+    }else{
+        if(!a.getTipo().toString().equals("bool")){
+            
+        }else{
+            switch(o.toString()){
+                case "==": PrincipalCompi.valueb=(Boolean.parseBoolean(a.getValor().toString()) && Boolean.parseBoolean(b.toString()));break;
+                case "!=": PrincipalCompi.valueb=(Boolean.parseBoolean(a.getValor().toString()) != Boolean.parseBoolean(b.toString()));break;
+                default:
+
+                break;
+            }
+        }
+    }
     :}|
     Op_booleano:b Op_relacional:o Identificador:i {:
     PrincipalCompi.s_bool="("+o+","+b+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    Simbolo a=null;
+    for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+        if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+            a=PrincipalCompi.tabla_simbolos.get(it);
+        }
+    }
+    if(a==null){
+        
+    }else{
+        if(!a.getTipo().toString().equals("bool")){
+            
+        }else{
+            switch(o.toString()){
+                case "==": PrincipalCompi.valueb=(Boolean.parseBoolean(a.getValor().toString()) && Boolean.parseBoolean(b.toString()));break;
+                case "!=": PrincipalCompi.valueb=(Boolean.parseBoolean(a.getValor().toString()) != Boolean.parseBoolean(b.toString()));break;
+                default:
+
+                break;
+            }
+        }
+    }
     :}|
     Identificador:i Op_relacional:o SENTENCIA_ARITMETICA {:
     PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+i+",TA"+PrincipalCompi.temp+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    Simbolo a=null;
+    for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+        if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+            a=PrincipalCompi.tabla_simbolos.get(it);
+        }
+    }
+    if(a==null){
+        
+    }else{
+        if(!a.getTipo().toString().equals("int")){
+        
+        }else{
+            switch(o.toString()){
+                case ">":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>PrincipalCompi.value;break;
+                case "<":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())<PrincipalCompi.value;break;
+                case "==":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())==PrincipalCompi.value;break;
+                case "!=": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())!=PrincipalCompi.value;break;
+                case ">=": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>=PrincipalCompi.value;break;
+                case "<=": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())<=PrincipalCompi.value;break;
+                case ">>": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>PrincipalCompi.value;break;
+                case "<<": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>PrincipalCompi.value;break;
+                default:break;
+            }
+        }
+    }
     :}|
     SENTENCIA_ARITMETICA Op_relacional:o Identificador:i {:
     PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+",TA"+PrincipalCompi.temp+","+i+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    Simbolo a=null;
+    for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+        if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre())){
+            a=PrincipalCompi.tabla_simbolos.get(it);
+        }
+    }
+    if(a==null){
+        
+    }else{
+        if(!a.getTipo().toString().equals("int")){
+        
+        }else{
+            switch(o.toString()){
+                case ">":PrincipalCompi.valueb=PrincipalCompi.value>Integer.parseInt(a.getValor().toString());break;
+                case "<":PrincipalCompi.valueb=PrincipalCompi.value<Integer.parseInt(a.getValor().toString());break;
+                case "==":PrincipalCompi.valueb=PrincipalCompi.value==Integer.parseInt(a.getValor().toString());break;
+                case "!=": PrincipalCompi.valueb=PrincipalCompi.value!=Integer.parseInt(a.getValor().toString());break;
+                case ">=": PrincipalCompi.valueb=PrincipalCompi.value>=Integer.parseInt(a.getValor().toString());break;
+                case "<=": PrincipalCompi.valueb=PrincipalCompi.value<=Integer.parseInt(a.getValor().toString());break;
+                case ">>": PrincipalCompi.valueb=PrincipalCompi.value>Integer.parseInt(a.getValor().toString());break;
+                case "<<": PrincipalCompi.valueb=PrincipalCompi.value<Integer.parseInt(a.getValor().toString());break;
+                default:break;
+            }
+        }
+    }
     :}|
     Identificador:i Op_relacional:o Identificador:n {:
     PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
+    Simbolo a=null;
+    Simbolo b=null;
+    for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+        if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+            a=PrincipalCompi.tabla_simbolos.get(it);
+        }
+        if(n.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+            b=PrincipalCompi.tabla_simbolos.get(it);
+        }
+    }
+    if(a==null || b==null){
+        
+    }else{
+        if(!a.getTipo().toString().equals("int") || !b.getTipo().toString().equals("int")){
+        
+        }else{
+            switch(o.toString()){
+                case ">":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>Integer.parseInt(b.getValor().toString());break;
+                case "<":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())<Integer.parseInt(b.getValor().toString());break;
+                case "==":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())==Integer.parseInt(b.getValor().toString());break;
+                case "!=": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())!=Integer.parseInt(b.getValor().toString());break;
+                case ">=": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>=Integer.parseInt(b.getValor().toString());break;
+                case "<=": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())<=Integer.parseInt(b.getValor().toString());break;
+                case ">>": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>Integer.parseInt(b.getValor().toString());break;
+                case "<<": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())<Integer.parseInt(b.getValor().toString());break;
+                default:break;
+            }
+        }
+    }
     :}|
     Identificador:i Op_relacional:o Numero:n {:
     PrincipalCompi.s_bool="("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    Simbolo a=null;
+    for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+        if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+            a=PrincipalCompi.tabla_simbolos.get(it);
+        }
+    }
+    if(a==null){
+        
+    }else{
+        if(!a.getTipo().toString().equals("int")){
+        
+        }else{
+            switch(o.toString()){
+                case ">":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>Integer.parseInt(n.toString());break;
+                case "<":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())<Integer.parseInt(n.toString());break;
+                case "==":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())==Integer.parseInt(n.toString());break;
+                case "!=": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())!=Integer.parseInt(n.toString());break;
+                case ">=": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>=Integer.parseInt(n.toString());break;
+                case "<=": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())<=Integer.parseInt(n.toString());break;
+                case ">>": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>Integer.parseInt(n.toString());break;
+                case "<<": PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())<Integer.parseInt(n.toString());break;
+                default:break;
+            }
+        }
+    }
     :}|
     Numero:n Op_relacional:o Identificador:i {:
     PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+n+","+i+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    Simbolo a=null;
+    for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+        if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+            a=PrincipalCompi.tabla_simbolos.get(it);
+        }
+    }
+    if(a==null){
+        
+    }else{
+        if(!a.getTipo().toString().equals("int")){
+        
+        }else{
+            switch(o.toString()){
+                case ">":PrincipalCompi.valueb=Integer.parseInt(n.toString())>Integer.parseInt(a.getValor().toString());break;
+                case "<":PrincipalCompi.valueb=Integer.parseInt(n.toString())<Integer.parseInt(a.getValor().toString());break;
+                case "==":PrincipalCompi.valueb=Integer.parseInt(n.toString())==Integer.parseInt(a.getValor().toString());break;
+                case "!=": PrincipalCompi.valueb=Integer.parseInt(n.toString())!=Integer.parseInt(a.getValor().toString());break;
+                case ">=": PrincipalCompi.valueb=Integer.parseInt(n.toString())>=Integer.parseInt(a.getValor().toString());break;
+                case "<=": PrincipalCompi.valueb=Integer.parseInt(n.toString())<=Integer.parseInt(a.getValor().toString());break;
+                case ">>": PrincipalCompi.valueb=Integer.parseInt(n.toString())>Integer.parseInt(a.getValor().toString());break;
+                case "<<": PrincipalCompi.valueb=Integer.parseInt(n.toString())<Integer.parseInt(a.getValor().toString());break;
+                default:break;
+            }
+        }
+    }
     :}|
 ;
 SENTENCIA_ARITMETICA ::=
     Numero:n Suma:s Numero:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+        PrincipalCompi.value=Integer.parseInt(n.toString())+Integer.parseInt(i.toString());
     :} |
     Identificador:i Suma:s Numero:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+        Simbolo a=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null){
+            
+        }else{
+            if(!a.getTipo().equals("int")){
+                
+            }else{
+                PrincipalCompi.value=Integer.parseInt(a.getValor().toString())+Integer.parseInt(n.toString());
+            }
+        }
     :} |
     Numero:n Suma:s Identificador:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int")){
+                
+            }else{
+                    PrincipalCompi.value=Integer.parseInt(n.toString())+Integer.parseInt(a.getValor().toString());
+                }
+            }
+        
     :} |
     Identificador:i Suma:s Identificador:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+    Simbolo b=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+            if(n.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                b=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null || b==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int") || !b.getTipo().toString().equals("int")){
+                
+            }else{
+                    PrincipalCompi.value=Integer.parseInt(a.getValor().toString())+Integer.parseInt(b.getValor().toString());
+                }
+            }
+        
+
     :} |
     Numero:n Resta:s Numero:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.value=Integer.parseInt(n.toString())-Integer.parseInt(i.toString());
     :} |
     Identificador:i Resta:s Numero:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int")){
+                
+            }else{
+                PrincipalCompi.value=Integer.parseInt(a.getValor().toString())-Integer.parseInt(n.toString());
+            }
+        }
     :} |
     Numero:n Resta:s Identificador:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int")){
+                
+            }else{
+                    PrincipalCompi.value=Integer.parseInt(n.toString())-Integer.parseInt(a.getValor().toString());
+                }
+            }
+        
     :} |
     Identificador:i Resta:s Identificador:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+    Simbolo b=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+            if(n.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                b=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null || b==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int") || !b.getTipo().toString().equals("int")){
+                
+            }else{
+                    PrincipalCompi.value=Integer.parseInt(a.getValor().toString())+Integer.parseInt(b.getValor().toString());
+                }
+            }
+        
     :} |
     Numero:n Multiplicacion:s Numero:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.value=Integer.parseInt(n.toString())*Integer.parseInt(i.toString());
     :} |
     Identificador:i Multiplicacion:s Numero:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int")){
+                
+            }else{
+                PrincipalCompi.value=Integer.parseInt(a.getValor().toString())*Integer.parseInt(n.toString());
+            }
+        }
     :} |
     Numero:n Multiplicacion:s Identificador:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int")){
+                
+            }else{
+                    PrincipalCompi.value=Integer.parseInt(n.toString())*Integer.parseInt(a.getValor().toString());
+                }
+            }
+        
     :} |
     Identificador:i Multiplicacion:s Identificador:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+    Simbolo b=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+            if(n.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                b=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null || b==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int") || !b.getTipo().toString().equals("int")){
+                
+            }else{
+                    PrincipalCompi.value=Integer.parseInt(a.getValor().toString())+Integer.parseInt(b.getValor().toString());
+                }
+            }
+        
     :} |
     Numero:n Division:s Numero:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.value=Integer.parseInt(n.toString())/Integer.parseInt(i.toString());
     :} |
     Identificador:i Division:s Numero:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int")){
+                
+            }else{
+                PrincipalCompi.value=Integer.parseInt(a.getValor().toString())/Integer.parseInt(n.toString());
+            }
+        }
     :} |
     Numero:n Division:s Identificador:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int")){
+                
+            }else{
+                    PrincipalCompi.value=Integer.parseInt(n.toString())/Integer.parseInt(a.getValor().toString());
+                }
+            }
+        
     :} |
     Identificador:i Division:s Identificador:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    Simbolo a=null;
+    Simbolo b=null;
+        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
+            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                a=PrincipalCompi.tabla_simbolos.get(it);
+            }
+            if(n.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
+                b=PrincipalCompi.tabla_simbolos.get(it);
+            }
+        }
+        if(a==null || b==null){
+            
+        }else{
+            if(!a.getTipo().toString().equals("int") || !b.getTipo().toString().equals("int")){
+                
+            }else{
+                    PrincipalCompi.value=Integer.parseInt(a.getValor().toString())+Integer.parseInt(b.getValor().toString());
+                }
+            }
+        
     :}
 ;
 WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c {:

@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package codigo;
 
 /**
  *
  * @author Rodrigo
  */
-
-
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -41,12 +38,10 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
-
-
-
 public class PrincipalCompi extends javax.swing.JFrame {
+
     DefaultTableModel modelo;
-    
+
     DefaultStyledDocument doc;
     final StyleContext cont = StyleContext.getDefaultStyleContext();
     final AttributeSet red = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.RED);
@@ -55,12 +50,12 @@ public class PrincipalCompi extends javax.swing.JFrame {
     final AttributeSet green = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.green);
     final AttributeSet yellow = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.yellow);
     final AttributeSet orange = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.orange);
-    
-    private String dirNuevo="";
-    private String nomNuevo="";
-    
-    public static String ci="";
-    public static String sentencia[]=new String[36];
+
+    private String dirNuevo = "";
+    private String nomNuevo = "";
+
+    public static String ci = "";
+    public static String sentencia[] = new String[36];
     public static String declaracion;
     public static String ifs;
     public static String elses;
@@ -71,20 +66,27 @@ public class PrincipalCompi extends javax.swing.JFrame {
     public static String fors;
     public static String s_for;
     public static String d_for;
-    
+    public static int value;
+    public static boolean valueb;
+
     public static int temp;
     public static int tempb;
     public static int status;
     public static int choice;
     public static int loop;
-    
-    public static ArrayList<Simbolo> tabla_simbolos;
-    
-    public static String error_semantico;
-    
-    public PrincipalCompi() {
-        doc = new DefaultStyledDocument() {
 
+    public static ArrayList<Simbolo> tabla_simbolos = new ArrayList<>();
+
+    public static String[] error;
+    public static ArrayList<String> err = new ArrayList<>();
+
+    public PrincipalCompi() {
+        //tabla_simbolos
+        //err.
+        Object t=new Object();
+        
+        doc = new DefaultStyledDocument() {
+            
             @Override
             public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
                 super.insertString(offset, str, a);
@@ -105,7 +107,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
                             setCharacterAttributes(wordL, wordR - wordL, orange, false);
                         } else if (text.substring(wordL, wordR).matches("(\\W)*(if|else|do|while|for|stopLoop)")) {
                             setCharacterAttributes(wordL, wordR - wordL, blue, false);
-                        } else if (text.substring(wordL, wordR).matches("(\\W)*(byte|int|char|long|float|double|String|bool)")) {
+                        } else if (text.substring(wordL, wordR).matches("(\\W)*(int|bool)")) {
                             setCharacterAttributes(wordL, wordR - wordL, green, false);
                         } else if (text.substring(wordL, wordR).matches("(\\W)*(spinCraneLeft|spinCraneRight|moveFowardCrane|moveBackCrane|spinBallLeft|spinBallRight|hitToTheLeft|hitToTheRight|waitTime)")) {
                             setCharacterAttributes(wordL, wordR - wordL, red, false);
@@ -135,7 +137,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
                     setCharacterAttributes(before, after - before, orange, false);
                 } else if (text.substring(before, after).matches("(\\W)*(if|else|do|while|for|stopLoop)")) {
                     setCharacterAttributes(before, after - before, blue, false);
-                } else if (text.substring(before, after).matches("(\\W)*(byte|int|char|long|float|double|String|bool)")) {
+                } else if (text.substring(before, after).matches("(\\W)*(int|bool)")) {
                     setCharacterAttributes(before, after - before, green, false);
                 } else if (text.substring(before, after).matches("(\\W)*(spinCraneLeft|spinCraneRight|moveFowardCrane|moveBackCrane|spinBallLeft|spinBallRight|hitToTheLeft|hitToTheRight|waitTime)")) {
                     setCharacterAttributes(before, after - before, red, false);
@@ -150,7 +152,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setTitle("Compilador - WreckBall");
     }
-    
+
     private int findLastNonWordChar(String text, int index) {
         while (--index >= 0) {
             if (String.valueOf(text.charAt(index)).matches("\\W")) {
@@ -159,7 +161,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         }
         return index;
     }
-    
+
     private int findFirstNonWordChar(String text, int index) {
         while (index < text.length()) {
             if (String.valueOf(text.charAt(index)).matches("\\W")) {
@@ -169,11 +171,11 @@ public class PrincipalCompi extends javax.swing.JFrame {
         }
         return index;
     }
-    
-    private void analizarLexico() throws IOException{
+
+    private void analizarLexico() throws IOException {
         String expr = (String) jTextPane1.getText();
         codigo.Lexer lexer = new codigo.Lexer(new StringReader(expr));
-        
+
         while (true) {
             Tokens token = lexer.yylex();
             if (token == null) {
@@ -186,139 +188,139 @@ public class PrincipalCompi extends javax.swing.JFrame {
                     //resultado += "LINEA " + cont + "\n";
                     break;
                 case Comillas:
-                    modelo.addRow(new Object[] {"<Comillas>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Comillas>", lexer.lexeme});
                     break;
                 case Cadena:
-                    modelo.addRow(new Object[] {"<Tipo de dato>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Tipo de dato>", lexer.lexeme});
                     break;
                 case Int:
-                    modelo.addRow(new Object[] {"<Tipo de dato entero>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Tipo de dato entero>", lexer.lexeme});
                     break;
                 case Bool:
-                    modelo.addRow(new Object[] {"<Tipo de dato booleano>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Tipo de dato booleano>", lexer.lexeme});
                     break;
                 case If:
-                    modelo.addRow(new Object[] {"<Reservada if>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Reservada if>", lexer.lexeme});
                     break;
                 case Else:
-                    modelo.addRow(new Object[] {"<Reservada else>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Reservada else>", lexer.lexeme});
                     break;
                 case Do:
-                    modelo.addRow(new Object[] {"<Reservada do>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Reservada do>", lexer.lexeme});
                     break;
                 case While:
-                    modelo.addRow(new Object[] {"<Reservada while>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Reservada while>", lexer.lexeme});
                     break;
                 case For:
-                    modelo.addRow(new Object[] {"<Reservada for>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Reservada for>", lexer.lexeme});
                     break;
                 case StopLoop:
-                    modelo.addRow(new Object[] {"<Reservada stopLoop>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Reservada stopLoop>", lexer.lexeme});
                     break;
                 case SpinCraneLeft:
-                    modelo.addRow(new Object[] {"<Método spinCraneLeft>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Método spinCraneLeft>", lexer.lexeme});
                     break;
                 case SpinCraneRight:
-                    modelo.addRow(new Object[] {"<Método spinCraneRight>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Método spinCraneRight>", lexer.lexeme});
                     break;
                 case MoveFowardCrane:
-                    modelo.addRow(new Object[] {"<Método moveFowardCrane>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Método moveFowardCrane>", lexer.lexeme});
                     break;
                 case MoveBackCrane:
-                    modelo.addRow(new Object[] {"<Método moveBackCrane>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Método moveBackCrane>", lexer.lexeme});
                     break;
                 case SpinBallLeft:
-                    modelo.addRow(new Object[] {"<Método spinBallLeft>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Método spinBallLeft>", lexer.lexeme});
                     break;
                 case SpinBallRight:
-                    modelo.addRow(new Object[] {"<Método spinBallRight>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Método spinBallRight>", lexer.lexeme});
                     break;
                 case HitToTheLeft:
-                    modelo.addRow(new Object[] {"<Método hitToTheLeft>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Método hitToTheLeft>", lexer.lexeme});
                     break;
                 case HitToTheRight:
-                    modelo.addRow(new Object[] {"<Método hitToTheRight>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Método hitToTheRight>", lexer.lexeme});
                     break;
                 case Igual:
-                    modelo.addRow(new Object[] {"<Operador igual>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador igual>", lexer.lexeme});
                     break;
                 case Suma:
-                    modelo.addRow(new Object[] {"<Operador suma>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador suma>", lexer.lexeme});
                     break;
                 case Resta:
-                    modelo.addRow(new Object[] {"<Operador resta>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador resta>", lexer.lexeme});
                     break;
                 case Multiplicacion:
-                    modelo.addRow(new Object[] {"<Operador multiplicación>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador multiplicación>", lexer.lexeme});
                     break;
                 case Division:
-                    modelo.addRow(new Object[] {"<Operador división>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador división>", lexer.lexeme});
                     break;
                 case Op_logico:
-                    modelo.addRow(new Object[] {"<Operador lógico>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador lógico>", lexer.lexeme});
                     break;
                 case Op_incremento:
-                    modelo.addRow(new Object[] {"<Operador incremento/decremento>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador incremento/decremento>", lexer.lexeme});
                     break;
                 case Op_relacional:
-                    modelo.addRow(new Object[] {"<Operador relacional>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador relacional>", lexer.lexeme});
                     break;
                 case Op_atribucion:
-                    modelo.addRow(new Object[] {"<Operador atribución>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador atribución>", lexer.lexeme});
                     break;
                 case Op_booleano:
-                    modelo.addRow(new Object[] {"<Operador booleano>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Operador booleano>", lexer.lexeme});
                     break;
                 case Parentesis_a:
-                    modelo.addRow(new Object[] {"<Paréntesis de apertura>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Paréntesis de apertura>", lexer.lexeme});
                     break;
                 case Parentesis_c:
-                    modelo.addRow(new Object[] {"<Paréntesis de cierre>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Paréntesis de cierre>", lexer.lexeme});
                     break;
                 case Llave_a:
-                    modelo.addRow(new Object[] {"<Llave de apertura>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Llave de apertura>", lexer.lexeme});
                     break;
                 case Llave_c:
-                    modelo.addRow(new Object[] {"<Llave de cierre>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Llave de cierre>", lexer.lexeme});
                     break;
                 case Corchete_a:
-                    modelo.addRow(new Object[] {"<Corchete de apertura>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Corchete de apertura>", lexer.lexeme});
                     break;
                 case Corchete_c:
-                    modelo.addRow(new Object[] {"<Corchete de cierre>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Corchete de cierre>", lexer.lexeme});
                     break;
                 case Start:
-                    modelo.addRow(new Object[] {"<Reservada start>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Reservada start>", lexer.lexeme});
                     break;
                 case P_coma:
-                    modelo.addRow(new Object[] {"<Punto y coma>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Punto y coma>", lexer.lexeme});
                     break;
                 case Identificador:
-                    modelo.addRow(new Object[] {"<Identificador>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Identificador>", lexer.lexeme});
                     break;
                 case Numero:
-                    modelo.addRow(new Object[] {"<Número>",lexer.lexeme});
+                    modelo.addRow(new Object[]{"<Número>", lexer.lexeme});
                     break;
                 case ERROR:
                     String ST = jTextPane1.getText();
                     Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
-            {
-                try {
-                    s.parse();
-                } catch (Exception ex) {
-                    Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+                     {
+                        try {
+                            s.parse();
+                        } catch (Exception ex) {
+                            Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     Symbol sym = s.getS();
-                    modelo.addRow(new Object[] {"<Símbolo no definido>",sym.value});
+                    modelo.addRow(new Object[]{"<Símbolo no definido>", sym.value});
                     break;
                 default:
-                    modelo.addRow(new Object[] {null,lexer.lexeme});
+                    modelo.addRow(new Object[]{null, lexer.lexeme});
                     break;
             }
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -381,6 +383,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         jLabel1.setText("Tabla de Tokens");
 
         jTextPane1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextPane1.setText("start(){\n\n}");
         TextLineNumber lineas=new TextLineNumber(jTextPane1);
         jScrollPane1.setRowHeaderView(lineas);
         jScrollPane1.setViewportView(jTextPane1);
@@ -416,6 +419,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(jPanel1);
 
+        jList2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {  };
             public int getSize() { return strings.length; }
@@ -532,11 +536,9 @@ public class PrincipalCompi extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Nuevo nv=new Nuevo(this, true,this);
         //nv.show();
-        String[] array=new String[]{"Item 1","Item 2","Item 3"};
-        jList2.setListData(array);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    public boolean Guardar(){
+    public boolean Guardar() {
         FileOutputStream out;
         PrintStream p;
 
@@ -552,58 +554,68 @@ public class PrincipalCompi extends javax.swing.JFrame {
             return false;
         }
     }
-    
+
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-    tabla_simbolos.clear();
-    for(int i=0;i<=35;i++){    
-        sentencia[i]="";
-    }
-    declaracion="";
-    ifs="";
-    elses="";
-    s_arit="";
-    s_bool="";
-    whiles="";
-    dowhiles="";
-    fors="";
-    s_for="";
-    d_for="";
-    error_semantico="";
-    status=0;
-    temp=0;
-    choice=0;
-    loop=0;
-        
+        tabla_simbolos.clear();
+        err.clear();
+
+        for (int i = 0; i <= 35; i++) {
+            sentencia[i] = "";
+        }
+        declaracion = "";
+        ifs = "";
+        elses = "";
+        s_arit = "";
+        s_bool = "";
+        whiles = "";
+        dowhiles = "";
+        fors = "";
+        s_for = "";
+        d_for = "";
+        status = 0;
+        temp = 0;
+        choice = 0;
+        loop = 0;
+
         String resultado;
-        int n=jTable1.getRowCount();
-        
-        while(n>0){
-            modelo.removeRow(n-1);
+        int n = jTable1.getRowCount();
+
+        while (n > 0) {
+            modelo.removeRow(n - 1);
             n--;
         }
-        
+
         try {
             analizarLexico();
         } catch (IOException ex) {
             Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         String ST = jTextPane1.getText();
         Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
-        
+
         try {
             s.parse();
-            resultado="\nAnalisis realizado correctamente";
-            javax.swing.JOptionPane.showMessageDialog(null,ci);
+            resultado = "\nAnálisis realizado correctamente";
+            javax.swing.JOptionPane.showMessageDialog(null, ci);
             //output.setText(resultado);
         } catch (Exception ex) {
             Symbol sym = s.getS();
-            resultado="\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
+            resultado = "\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
             //output.setText(resultado);
         }
-        
+        if (err.isEmpty()) {
+            error = new String[]{"Análisis realizado correctamente"};
+        } else {
+            error = new String[err.size()];
+            for (int i = 0; i < err.size(); i++) {
+                error[i] = err.get(i);
+            }
+        }
+        jList2.setListData(error);
+        System.out.println(tabla_simbolos.size());
     }//GEN-LAST:event_jMenuItem3ActionPerformed
-    
+
     /*public void contarFilas(){
         int totalrows=jTextPane1.getLineCount();
             lineCounter.setText("1\n");
@@ -611,26 +623,25 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 lineCounter.setText(lineCounter.getText()+i+"\n");
             }
     }*/
-    
     public void llenarTabla(Vector v) {
-        
+
         DefaultTableModel jTable1 = new DefaultTableModel();
         for (int i = 0; i < v.size(); i = i + 2) {
 
-            modelo.addRow(new Object[]{v.elementAt(i+1), v.elementAt(i)});
+            modelo.addRow(new Object[]{v.elementAt(i + 1), v.elementAt(i)});
 
             System.err.println("" + v.elementAt(i));
 
         }
     }
-    
-    public void limpiarTablas(){
-        int var = modelo.getRowCount()-1;
-        for(int i = 0; i<=var ;i++){
+
+    public void limpiarTablas() {
+        int var = modelo.getRowCount() - 1;
+        for (int i = 0; i <= var; i++) {
             modelo.removeRow(0);
         }
     }
-    
+
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         //Abrir a=new Abrir(this, true, this);
@@ -653,18 +664,18 @@ public class PrincipalCompi extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
-     public void habilitarCampo(String dirnovo, String nomnovo){
+    public void habilitarCampo(String dirnovo, String nomnovo) {
         this.setTitle("Compilador");
-        this.nomNuevo=nomnovo;
-        this.dirNuevo=dirnovo+nomNuevo+".wb";
-        this.setTitle(this.getTitle()+" - "+dirNuevo);
+        this.nomNuevo = nomnovo;
+        this.dirNuevo = dirnovo + nomNuevo + ".wb";
+        this.setTitle(this.getTitle() + " - " + dirNuevo);
         jTextPane1.enable(true);
         //contarFilas();
     }
-    
-    public void habilitarCampo(String dirnovo){
+
+    public void habilitarCampo(String dirnovo) {
         this.setTitle("CompiladorEjemplo");
-        this.dirNuevo=dirnovo;
+        this.dirNuevo = dirnovo;
         try {
             FileInputStream fstream = new FileInputStream(dirNuevo);
             DataInputStream in = new DataInputStream(fstream);
@@ -673,18 +684,19 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 this.jTextPane1.setText(this.jTextPane1.getText() + in.readLine() + "\n");
             }
             in.close();
-            this.setTitle(this.getTitle()+" - "+dirNuevo);
+            this.setTitle(this.getTitle() + " - " + dirNuevo);
             jTextPane1.enable(true);
             //contarFilas();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,"File input error");
+            JOptionPane.showMessageDialog(this, "File input error");
         }
     }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) throws UnsupportedLookAndFeelException {
-       // SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.OfficeSilver2007Skin");
+        // SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.OfficeSilver2007Skin");
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -693,7 +705,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
         //</editor-fold>
         //</editor-fold>
-        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
