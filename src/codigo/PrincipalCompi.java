@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import java_cup.Lexer;
 import java_cup.runtime.Symbol;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -39,7 +40,12 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
 public class PrincipalCompi extends javax.swing.JFrame {
-
+    
+    JFileChooser seleccionado = new JFileChooser();
+    File archivo;
+    byte[] bytesImg;
+    GestionA gestion = new GestionA();
+    
     DefaultTableModel modelo;
 
     DefaultStyledDocument doc;
@@ -348,7 +354,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
 
@@ -473,15 +478,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItem4);
 
-        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem5.setText("Pila");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem5);
-
         jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem6.setText("Arbol");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
@@ -536,6 +532,23 @@ public class PrincipalCompi extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Nuevo nv=new Nuevo(this, true,this);
         //nv.show();
+        String[] array=new String[]{"Item 1","Item 2","Item 3"};
+        jList2.setListData(array);
+        
+        if(seleccionado.showDialog(null, "Guardar") == JFileChooser.APPROVE_OPTION){
+            archivo = seleccionado.getSelectedFile();
+            if(archivo.getName().endsWith("txt")){
+                String contenido = jTextPane1.getText();
+                String respuesta = gestion.GuardarATexto(archivo, contenido);
+                if(respuesta!=null){
+                    JOptionPane.showMessageDialog(null, respuesta);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Error al guardar codigo.");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "El texto se debe guardar en un formato de texto.");
+            }
+        }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public boolean Guardar() {
@@ -646,15 +659,24 @@ public class PrincipalCompi extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Abrir a=new Abrir(this, true, this);
         //a.setVisible(true);
+        if(seleccionado.showDialog(null, "Abrir") == JFileChooser.APPROVE_OPTION){
+            archivo = seleccionado.getSelectedFile();
+            if(archivo.canRead()){
+                if(archivo.getName().endsWith("txt")){
+                    String contenido = gestion.AbrirATexto(archivo);
+                    jTextPane1.setText(contenido);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Por favor seleccione un archivo de texto");
+                    }
+                }
+            }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
+        Automata a=new Automata(this, true, this);
+        a.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
-
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
@@ -725,7 +747,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
