@@ -300,9 +300,9 @@ DECLARACION ::=
                         n++;
                         break;
                     }else{
-                        int num=(int)temp.getValor();
-                        num++;
-                        temp.setValor(num);
+                        //int num=(int)temp.getValor();
+                        //num++;
+                        //temp.setValor(num);
                         n++;
                         break;
                     }
@@ -769,10 +769,10 @@ SENTENCIA_BOOLEANA ::=
         }
     }
     if(a==null){
-        
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
     }else{
         if(!a.getTipo().toString().equals("bool")){
-            
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo bool");
         }else{
             switch(o.toString()){
                 case "==": PrincipalCompi.valueb=(Boolean.parseBoolean(a.getValor().toString()) && Boolean.parseBoolean(b.toString()));break;
@@ -793,10 +793,10 @@ SENTENCIA_BOOLEANA ::=
         }
     }
     if(a==null){
-        
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
     }else{
         if(!a.getTipo().toString().equals("bool")){
-            
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo bool");
         }else{
             switch(o.toString()){
                 case "==": PrincipalCompi.valueb=(Boolean.parseBoolean(a.getValor().toString()) && Boolean.parseBoolean(b.toString()));break;
@@ -818,10 +818,10 @@ SENTENCIA_BOOLEANA ::=
         }
     }
     if(a==null){
-        
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
     }else{
         if(!a.getTipo().toString().equals("int")){
-        
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
         }else{
             switch(o.toString()){
                 case ">":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>PrincipalCompi.value;break;
@@ -847,10 +847,10 @@ SENTENCIA_BOOLEANA ::=
         }
     }
     if(a==null){
-        
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
     }else{
         if(!a.getTipo().toString().equals("int")){
-        
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
         }else{
             switch(o.toString()){
                 case ">":PrincipalCompi.valueb=PrincipalCompi.value>Integer.parseInt(a.getValor().toString());break;
@@ -879,10 +879,18 @@ SENTENCIA_BOOLEANA ::=
         }
     }
     if(a==null || b==null){
-        
-    }else{
-        if(!a.getTipo().toString().equals("int") || !b.getTipo().toString().equals("int")){
-        
+        if(a==null){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+        }
+        if(b==null){
+            PrincipalCompi.err.add("Error semántico; el identificador "+n+" no ha sido declarado");
+        }
+    }
+    else{
+        if(!a.getTipo().toString().equals("int")){
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
+        }else if(!b.getTipo().toString().equals("int")){
+            PrincipalCompi.err.add("Error semántico; el identificador "+n+" no es de tipo int");
         }else{
             switch(o.toString()){
                 case ">":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>Integer.parseInt(b.getValor().toString());break;
@@ -908,10 +916,10 @@ SENTENCIA_BOOLEANA ::=
         }
     }
     if(a==null){
-        
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
     }else{
         if(!a.getTipo().toString().equals("int")){
-        
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
         }else{
             switch(o.toString()){
                 case ">":PrincipalCompi.valueb=Integer.parseInt(a.getValor().toString())>Integer.parseInt(n.toString());break;
@@ -937,10 +945,10 @@ SENTENCIA_BOOLEANA ::=
         }
     }
     if(a==null){
-        
+        PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
     }else{
         if(!a.getTipo().toString().equals("int")){
-        
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
         }else{
             switch(o.toString()){
                 case ">":PrincipalCompi.valueb=Integer.parseInt(n.toString())>Integer.parseInt(a.getValor().toString());break;
@@ -971,10 +979,10 @@ SENTENCIA_ARITMETICA ::=
             }
         }
         if(a==null){
-            
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
         }else{
             if(!a.getTipo().equals("int")){
-                
+                PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
             }else{
                 PrincipalCompi.value=Integer.parseInt(a.getValor().toString())+Integer.parseInt(n.toString());
             }
@@ -989,12 +997,12 @@ SENTENCIA_ARITMETICA ::=
             }
         }
         if(a==null){
-            
+            PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
         }else{
             if(!a.getTipo().toString().equals("int")){
-                
+                PrincipalCompi.err.add("Error semántico; el identificador "+i+" no es de tipo int");
             }else{
-                    PrincipalCompi.value=Integer.parseInt(n.toString())+Integer.parseInt(a.getValor().toString());
+                PrincipalCompi.value=Integer.parseInt(n.toString())+Integer.parseInt(a.getValor().toString());
                 }
             }
         
@@ -1012,7 +1020,12 @@ SENTENCIA_ARITMETICA ::=
             }
         }
         if(a==null || b==null){
-            
+            if(a==null){
+                PrincipalCompi.err.add("Error semántico; el identificador "+i+" no ha sido declarado");
+            }
+            if(b==null){
+                PrincipalCompi.err.add("Error semántico; el identificador "+n+" no ha sido declarado");
+            }
         }else{
             if(!a.getTipo().toString().equals("int") || !b.getTipo().toString().equals("int")){
                 

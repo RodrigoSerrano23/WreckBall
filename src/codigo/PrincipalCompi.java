@@ -488,7 +488,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         jMenu3.add(jMenuItem6);
 
         jMenuItem7.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem7.setText("Tabla codigo int.");
+        jMenuItem7.setText("Código Interm.");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem7ActionPerformed(evt);
@@ -610,7 +610,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         try {
             s.parse();
             resultado = "\nAnálisis realizado correctamente";
-            javax.swing.JOptionPane.showMessageDialog(null, ci);
+            
             //output.setText(resultado);
         } catch (Exception ex) {
             Symbol sym = s.getS();
@@ -683,7 +683,11 @@ public class PrincipalCompi extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        // TODO add your handling code here:
+        if(err.isEmpty()){
+            javax.swing.JOptionPane.showMessageDialog(null, ci);
+        }else{
+            javax.swing.JOptionPane.showMessageDialog(null, "El código tiene errores");
+        }
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     public void habilitarCampo(String dirnovo, String nomnovo) {
