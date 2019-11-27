@@ -14,17 +14,15 @@ import java.util.ArrayList;
 public class CodigoLMS {
     private String[] cuartetos;
     private String res;
-    ArrayList<Simbolo> array;
     
-    public CodigoLMS(String a,ArrayList<Simbolo> arr){
+    public CodigoLMS(String a){
         cuartetos=a.split("\n");
-        array=array;
         res="vmthread main(){\nDATA8 boolRegister\nDATA8 eightRegister\nDATA16 sixteenRegister\nDATA32 timeRegister\nDATA32 timeCounter\nDATA32 thirtytwoRegister\n";
     }
     
     public String lms(){
-        for(int i=0;i<cuartetos.length;i++){
-            res=res+traslacion(cuartetos[i]);
+        for (String cuarteto : cuartetos) {
+            res = res + traslacion(cuarteto);
         }
         res=res+"}";
         return res;
@@ -37,7 +35,7 @@ public class CodigoLMS {
         }else{
             resultado=cuarteto+"\n";
         }
-        return "";    
+        return resultado;    
     }
         
     private String comprobarCuarteto(String cuarteto){
@@ -111,7 +109,6 @@ public class CodigoLMS {
             }
         }
         return "MOV16_16("+a+","+b+")\n"; 
-        
     }
     
     private String mayor_que(String a,String b){
@@ -135,22 +132,58 @@ public class CodigoLMS {
     }
     
     private String igual_que(String a,String b){
+        if(a.equals("true") & b.substring(0,2).equals("TB")){
+            return "CP_EQ8(1,eightRegister,eightRegister)\n";
+        }
+        if(a.equals("false") & b.substring(0,2).equals("TB")){
+            return "CP_EQ8(0,eightRegister,eightRegister)\n";
+        }
+        if(b.equals("true") & a.substring(0,2).equals("TB")){
+            return "CP_EQ8(eightRegister,1,eightRegister)\n";
+        }
+        if(b.equals("false") & a.substring(0,2).equals("TB")){
+            return "CP_EQ8(eightRegister,0,eightRegister)\n";
+        }
         if(a.substring(0,2).equals("TA")){
             return "CP_EQ16("+a+",sixteenRegister,eightRegister)\n";
         }
         if(b.substring(0,2).equals("TA")){
             return "CP_EQ16(sixteenRegister,"+b+",eightRegister)\n";
         }
+        String[] arregloPrueba= res.split("\n");
+        for(int i=0;i<arregloPrueba.length;i++){
+            if(arregloPrueba[i].equals("DATA8 "+a)){
+                return "CP_EQ8("+a+","+b+",eightRegister)\n";
+            }
+        } 
         return "CP_EQ16("+a+","+b+",eightRegister)\n";
     }
     
     private String diferente_que(String a,String b){
+        if(a.equals("true") & b.substring(0,2).equals("TB")){
+            return "CP_NEQ8(1,eightRegister,eightRegister)\n";
+        }
+        if(a.equals("false") & b.substring(0,2).equals("TB")){
+            return "CP_NEQ8(0,eightRegister,eightRegister)\n";
+        }
+        if(b.equals("true") & a.substring(0,2).equals("TB")){
+            return "CP_NEQ8(eightRegister,1,eightRegister)\n";
+        }
+        if(b.equals("false") & a.substring(0,2).equals("TB")){
+            return "CP_NEQ8(eightRegister,0,eightRegister)\n";
+        }
         if(a.substring(0,2).equals("TA")){
             return "CP_NEQ16("+a+",sixteenRegister,eightRegister)\n";
         }
         if(b.substring(0,2).equals("TA")){
             return "CP_NEQ16(sixteenRegister,"+b+",eightRegister)\n";
         }
+        String[] arregloPrueba= res.split("\n");
+        for(int i=0;i<arregloPrueba.length;i++){
+            if(arregloPrueba[i].equals("DATA8 "+a)){
+                return "CP_NEQ8("+a+","+b+",eightRegister)\n";
+            }
+        } 
         return "CP_NEQ16("+a+","+b+",eightRegister)\n";
     }
     
@@ -183,7 +216,8 @@ public class CodigoLMS {
                     +"OUTPUT_POWER(0,4,75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
-                    +"OUTPUT_STOP(0,6,1\n)";
+                    +"TIMER_READY(timeCounter)\n"
+                    +"OUTPUT_STOP(0,6,1)\n";
         }else{
             r="MOVE16_32("+a+",timeRegister)\n"
                     +"MUL32(timeRegister,1000)\n"
@@ -191,7 +225,8 @@ public class CodigoLMS {
                     +"OUTPUT_POWER(0,4,75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
-                    +"OUTPUT_STOP(0,6,1\n)";
+                    +"TIMER_READY(timeCounter)\n"
+                    +"OUTPUT_STOP(0,6,1)\n";
         }
         return r;
     }
@@ -205,7 +240,8 @@ public class CodigoLMS {
                     +"OUTPUT_POWER(0,4,-75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
-                    +"OUTPUT_STOP(0,6,1\n)";
+                    +"TIMER_READY(timeCounter)\n"
+                    +"OUTPUT_STOP(0,6,1)\n";
         }else{
             r="MOVE16_32("+a+",timeRegister)\n"
                     +"MUL32(timeRegister,1000)\n"
@@ -213,7 +249,8 @@ public class CodigoLMS {
                     +"OUTPUT_POWER(0,4,-75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
-                    +"OUTPUT_STOP(0,6,1\n)";
+                    +"TIMER_READY(timeCounter)\n"
+                    +"OUTPUT_STOP(0,6,1)\n";
         }
         return r;
     }
@@ -226,14 +263,16 @@ public class CodigoLMS {
                     +"OUTPUT_POWER(0,6,75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
-                    +"OUTPUT_STOP(0,6,1\n)";
+                    +"TIMER_READY(timeCounter)\n"
+                    +"OUTPUT_STOP(0,6,1)\n";
         }else{
             r="MOVE16_32("+a+",timeRegister)\n"
                     +"MUL32(timeRegister,1000)\n"
                     +"OUTPUT_POWER(0,6,75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
-                    +"OUTPUT_STOP(0,6,1\n)";
+                    +"TIMER_READY(timeCounter)\n"
+                    +"OUTPUT_STOP(0,6,1)\n";
         }
         return r;
     }
@@ -246,14 +285,16 @@ public class CodigoLMS {
                     +"OUTPUT_POWER(0,6,-75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
-                    +"OUTPUT_STOP(0,6,1\n)";
+                    +"TIMER_READY(timeCounter)\n"
+                    +"OUTPUT_STOP(0,6,1)\n";
         }else{
             r="MOVE16_32("+a+",timeRegister)\n"
                     +"MUL32(timeRegister,1000)\n"
                     +"OUTPUT_POWER(0,6,-75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
-                    +"OUTPUT_STOP(0,6,1\n)";
+                    +"TIMER_READY(timeCounter)\n"
+                    +"OUTPUT_STOP(0,6,1)\n";
         }
         return r;
     }
@@ -333,12 +374,15 @@ public class CodigoLMS {
         if(a.substring(0,2).equals("TA")){
             r="MOV16_32(sixteenRegister,timeRegister)\n"
                     + "MUL32(timeRegister,1000,timeRegister)\n"
-                    + "TIMER_WAIT(timeRegister,timeCounter)\n";
+                    + "TIMER_WAIT(timeRegister,timeCounter)\n"
+                    +"TIMER_READY(timeCounter)\n";
         }else{
             r="MOV16_32("+a+",timeRegister)\n"
                     + "MUL32(timeRegister,1000,timeRegister)\n"
-                    + "TIMER_WAIT(timeRegister,timeCounter)\n";
+                    + "TIMER_WAIT(timeRegister,timeCounter)\n"
+                    +"TIMER_READY(timeCounter)\n";
         }
         return r;
-    }
+    }    
+    
 }

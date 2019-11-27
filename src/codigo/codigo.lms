@@ -1,0 +1,9 @@
+vmthread main(){
+DATA8 boolRegister
+DATA8 eightRegister
+DATA16 sixteenRegister
+DATA32 timeRegister
+DATA32 timeCounter
+DATA32 thirtytwoRegister
+DATA16 _x
+}
