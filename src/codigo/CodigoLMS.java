@@ -21,6 +21,9 @@ public class CodigoLMS {
     }
     
     public String lms(){
+        if(cuartetos.length==1 && cuartetos[0].equals("")){
+            return res+"}";
+        }
         for (String cuarteto : cuartetos) {
             res = res + traslacion(cuarteto);
         }

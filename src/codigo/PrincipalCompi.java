@@ -695,24 +695,30 @@ public class PrincipalCompi extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        if(err.isEmpty()){
-            try{
-            File archivo=new File("src/codigo/codigo.lms");
-            if(!archivo.exists()){
-                archivo.createNewFile();
-            }else{
-                archivo.delete();
-                archivo.createNewFile();
-            }
-            FileWriter escribir=new FileWriter(archivo,true);
-            CodigoLMS csml=new CodigoLMS(ci);
-            escribir.write(csml.lms());
-            escribir.close();
-        }catch(Exception e){
+        try{
+        JFileChooser fiSa=new JFileChooser();
+        fiSa.showSaveDialog(this);
+        File f=fiSa.getSelectedFile();
+        String path=f.getPath();
+        String endpath=path.substring(path.length()-4,path.length());
+        if(!endpath.equals(".lms")){
+            f=new File(f.getPath()+".lms");
+        }
+        if(f.exists()){
+            f.delete(); 
             
         }
-        }else{
-            javax.swing.JOptionPane.showMessageDialog(null, "El código tiene errores");
+            f.createNewFile();
+        
+        FileWriter fw=new FileWriter(f,true);
+        CodigoLMS cod=new CodigoLMS(ci);
+        String tx=cod.lms();
+        fw.write(tx);
+        fw.close();
+        }catch(IOException e){
+            javax.swing.JOptionPane.showMessageDialog(null,"No se pudo guardar el archivo.");
+        }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"El archivo debe ser .lms");
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 

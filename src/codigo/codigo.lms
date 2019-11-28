@@ -5,5 +5,5 @@ DATA16 sixteenRegister
 DATA32 timeRegister
 DATA32 timeCounter
 DATA32 thirtytwoRegister
-DATA16 _x
+DATA16 _y
 }
