@@ -32,7 +32,7 @@ public class CodigoLMS {
     }
     
     private String traslacion(String cuarteto){
-        String resultado="";
+        String resultado;
         if(cuarteto.substring(0,1).equals("(") && cuarteto.substring(cuarteto.length()-1,cuarteto.length()).equals(")")){
             resultado=comprobarCuarteto(cuarteto.substring(1,cuarteto.length()-1));
         }else{
@@ -93,64 +93,64 @@ public class CodigoLMS {
     }
     
     private String igual(String a,String b){
-        if(a.substring(0,2).equals("TB")){
-            return "MOV8_8(eightRegister,"+b+")\n";
+        if(a.length()>2 && a.substring(0,2).equals("TB")){
+            return "MOVE8_8(eightRegister,"+b+")\n";
         }
         if(a.equals("true")){
-            return "MOV8_8(1,"+b+")\n";
+            return "MOVE8_8(1,"+b+")\n";
         }
         if(a.equals("false")){
-            return "MOV8_8(0,"+b+")\n";
+            return "MOVE8_8(0,"+b+")\n";
         }
-        if(a.substring(0,2).equals("TA")){
-            return "MOV16_16(sixteenRegister,"+b+")\n";
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
+            return "MOVE16_16(sixteenRegister,"+b+")\n";
         }
         String[] arregloPrueba= res.split("\n");
         for(int i=0;i<arregloPrueba.length;i++){
             if(arregloPrueba[i].equals("DATA8 "+a)){
-                return "MOV8_8("+a+","+b+")\n";
+                return "MOVE8_8("+a+","+b+")\n";
             }
         }
-        return "MOV16_16("+a+","+b+")\n"; 
+        return "MOVE16_16("+a+","+b+")\n"; 
     }
     
     private String mayor_que(String a,String b){
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             return "CP_GT16("+a+",sixteenRegister,eightRegister)\n";
         }
-        if(b.substring(0,2).equals("TA")){
+        if(b.length()>2 && b.substring(0,2).equals("TA")){
             return "CP_GT16(sixteenRegister,"+b+",eightRegister)\n";
         }
         return "CP_GT16("+a+","+b+",eightRegister)\n";
     }
     
     private String menor_que(String a,String b){
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             return "CP_LT16("+a+",sixteenRegister,eightRegister)\n";
         }
-        if(b.substring(0,2).equals("TA")){
+        if(b.length()>2 && b.substring(0,2).equals("TA")){
             return "CP_LT16(sixteenRegister,"+b+",eightRegister)\n";
         }
         return "CP_LT16("+a+","+b+",eightRegister)\n";
     }
     
     private String igual_que(String a,String b){
-        if(a.equals("true") & b.substring(0,2).equals("TB")){
+        if(b.length()>2 && a.equals("true") && b.substring(0,2).equals("TB")){
             return "CP_EQ8(1,eightRegister,eightRegister)\n";
         }
-        if(a.equals("false") & b.substring(0,2).equals("TB")){
+        if(b.length()>2 && a.equals("false") & b.substring(0,2).equals("TB")){
             return "CP_EQ8(0,eightRegister,eightRegister)\n";
         }
-        if(b.equals("true") & a.substring(0,2).equals("TB")){
+        if(a.length()>2 && b.equals("true") & a.substring(0,2).equals("TB")){
             return "CP_EQ8(eightRegister,1,eightRegister)\n";
         }
-        if(b.equals("false") & a.substring(0,2).equals("TB")){
+        if(a.length()>2 && b.equals("false") & a.substring(0,2).equals("TB")){
             return "CP_EQ8(eightRegister,0,eightRegister)\n";
         }
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             return "CP_EQ16("+a+",sixteenRegister,eightRegister)\n";
         }
-        if(b.substring(0,2).equals("TA")){
+        if(b.length()>2 && b.substring(0,2).equals("TA")){
             return "CP_EQ16(sixteenRegister,"+b+",eightRegister)\n";
         }
         String[] arregloPrueba= res.split("\n");
@@ -163,22 +163,22 @@ public class CodigoLMS {
     }
     
     private String diferente_que(String a,String b){
-        if(a.equals("true") & b.substring(0,2).equals("TB")){
+        if(a.equals("true") && b.length()>2 && b.substring(0,2).equals("TB")){
             return "CP_NEQ8(1,eightRegister,eightRegister)\n";
         }
-        if(a.equals("false") & b.substring(0,2).equals("TB")){
+        if(b.length()>2 && a.equals("false") && b.substring(0,2).equals("TB")){
             return "CP_NEQ8(0,eightRegister,eightRegister)\n";
         }
-        if(b.equals("true") & a.substring(0,2).equals("TB")){
+        if(a.length()>2 && b.equals("true") & a.substring(0,2).equals("TB")){
             return "CP_NEQ8(eightRegister,1,eightRegister)\n";
         }
-        if(b.equals("false") & a.substring(0,2).equals("TB")){
+        if(a.length()>2 && b.equals("false") & a.substring(0,2).equals("TB")){
             return "CP_NEQ8(eightRegister,0,eightRegister)\n";
         }
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             return "CP_NEQ16("+a+",sixteenRegister,eightRegister)\n";
         }
-        if(b.substring(0,2).equals("TA")){
+        if(b.length()>2 && b.substring(0,2).equals("TA")){
             return "CP_NEQ16(sixteenRegister,"+b+",eightRegister)\n";
         }
         String[] arregloPrueba= res.split("\n");
@@ -191,20 +191,20 @@ public class CodigoLMS {
     }
     
     private String mayor_o_igual_que(String a,String b){
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             return "CP_GTE16("+a+",sixteenRegister,eightRegister)\n";
         }
-        if(b.substring(0,2).equals("TA")){
+        if(b.length()>2 && b.substring(0,2).equals("TA")){
             return "CP_GTE16(sixteenRegister,"+b+",eightRegister)\n";
         }
         return "CP_GTE16("+a+","+b+",eightRegister)\n";
     }
     
     private String menor_o_igual_que(String a,String b){
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             return "CP_LTE16("+a+",sixteenRegister,eightRegister)\n";
         }
-        if(b.substring(0,2).equals("TA")){
+        if(b.length()>2 && b.substring(0,2).equals("TA")){
             return "CP_LTE16(sixteenRegister,"+b+",eightRegister)\n";
         }
         return "CP_LTE16("+a+","+b+",eightRegister)\n";
@@ -212,9 +212,9 @@ public class CodigoLMS {
     
     private String spinCraneLeft(String a){
         String r;
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             r="MOVE16_32(sixteenRegister,timeRegister)\n"
-                    +"MUL32(timeRegister,1000)\n"
+                    +"MUL32(timeRegister,1000,timeRegister)\n"
                     +"OUTPUT_POWER(0,2,-75)\n"
                     +"OUTPUT_POWER(0,4,75)\n"
                     +"OUTPUT_START(0,6)\n"
@@ -223,7 +223,7 @@ public class CodigoLMS {
                     +"OUTPUT_STOP(0,6,1)\n";
         }else{
             r="MOVE16_32("+a+",timeRegister)\n"
-                    +"MUL32(timeRegister,1000)\n"
+                    +"MUL32(timeRegister,1000,timeRegister)\n"
                     +"OUTPUT_POWER(0,2,-75)\n"
                     +"OUTPUT_POWER(0,4,75)\n"
                     +"OUTPUT_START(0,6)\n"
@@ -236,9 +236,9 @@ public class CodigoLMS {
     
     private String spinCraneRight(String a){
         String r;
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             r="MOVE16_32(sixteenRegister,timeRegister)\n"
-                    +"MUL32(timeRegister,1000)\n"
+                    +"MUL32(timeRegister,1000,timeRegister)\n"
                     +"OUTPUT_POWER(0,2,75)\n"
                     +"OUTPUT_POWER(0,4,-75)\n"
                     +"OUTPUT_START(0,6)\n"
@@ -247,7 +247,7 @@ public class CodigoLMS {
                     +"OUTPUT_STOP(0,6,1)\n";
         }else{
             r="MOVE16_32("+a+",timeRegister)\n"
-                    +"MUL32(timeRegister,1000)\n"
+                    +"MUL32(timeRegister,1000,timeRegister)\n"
                     +"OUTPUT_POWER(0,2,75)\n"
                     +"OUTPUT_POWER(0,4,-75)\n"
                     +"OUTPUT_START(0,6)\n"
@@ -260,9 +260,9 @@ public class CodigoLMS {
     
     private String moveFowardCrane(String a){
         String r;
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             r="MOVE16_32(sixteenRegister,timeRegister)\n"
-                    +"MUL32(timeRegister,1000)\n"
+                    +"MUL32(timeRegister,1000,timeRegister)\n"
                     +"OUTPUT_POWER(0,6,75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
@@ -270,7 +270,7 @@ public class CodigoLMS {
                     +"OUTPUT_STOP(0,6,1)\n";
         }else{
             r="MOVE16_32("+a+",timeRegister)\n"
-                    +"MUL32(timeRegister,1000)\n"
+                    +"MUL32(timeRegister,1000,timeRegister)\n"
                     +"OUTPUT_POWER(0,6,75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
@@ -282,9 +282,9 @@ public class CodigoLMS {
     
     private String moveBackCrane(String a){
         String r;
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             r="MOVE16_32(sixteenRegister,timeRegister)\n"
-                    +"MUL32(timeRegister,1000)\n"
+                    +"MUL32(timeRegister,1000,timeRegister)\n"
                     +"OUTPUT_POWER(0,6,-75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
@@ -292,7 +292,7 @@ public class CodigoLMS {
                     +"OUTPUT_STOP(0,6,1)\n";
         }else{
             r="MOVE16_32("+a+",timeRegister)\n"
-                    +"MUL32(timeRegister,1000)\n"
+                    +"MUL32(timeRegister,1000,timeRegister)\n"
                     +"OUTPUT_POWER(0,6,-75)\n"
                     +"OUTPUT_START(0,6)\n"
                     +"TIMER_WAIT(timeRegister,timeCounter)\n"
@@ -304,28 +304,32 @@ public class CodigoLMS {
     
     private String spinBallLeft(String a){
         String r;
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             r="MOVE16_32(sixteenRegister,thirtytwoRegister)\n"
                     +"OUTPUT_STEP_POWER(0,1,75,thirtytwoRegister,0,0,1)\n"
-                    +"OUTPUT_START(0,1)\n";
+                    +"OUTPUT_START(0,1)\n"
+                    +"OUTPUT_READY(0,1)\n";
         }else{
             r="MOVE16_32("+a+",thirtytwoRegister)\n"
                     +"OUTPUT_STEP_POWER(0,1,75,thirtytwoRegister,0,0,1)\n"
-                    +"OUTPUT_START(0,1)\n";
+                    +"OUTPUT_START(0,1)\n"
+                    +"OUTPUT_READY(0,1)\n";
         }
         return r;
     }
     
     private String spinBallRight(String a){
         String r;
-        if(a.substring(0,2).equals("TA")){
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
             r="MOVE16_32(sixteenRegister,thirtytwoRegister)\n"
                     +"OUTPUT_STEP_POWER(0,1,-75,thirtytwoRegister,0,0,1)\n"
-                    +"OUTPUT_START(0,1)\n";
+                    +"OUTPUT_START(0,1)\n"
+                    +"OUTPUT_READY(0,1)\n";
         }else{
             r="MOVE16_32("+a+",thirtytwoRegister)\n"
                     +"OUTPUT_STEP_POWER(0,1,-75,thirtytwoRegister,0,0,1)\n"
-                    +"OUTPUT_START(0,1)\n";
+                    +"OUTPUT_START(0,1)\n"
+                    +"OUTPUT_READY(0,1)\n";
         }
         return r;
     }
@@ -333,21 +337,25 @@ public class CodigoLMS {
     private String hitToTheLeft(){
         String r="OUTPUT_STEP_POWER(0,1,-75,90,0,0,1)\n" +
                 "OUTPUT_START(0,1)\n"+
+                "OUTPUT_READY(0,1)\n"+
                 "OUTPUT_STEP_POWER(0,1,75,180,0,0,1)\n" +
-                "OUTPUT_START(0,1)\n";
+                "OUTPUT_START(0,1)\n"+
+                "OUTPUT_READY(0,1)\n";
         return r;
     }
     
     private String hitToTheRight(){
         String r="OUTPUT_STEP_POWER(0,1,75,90,0,0,1)\n" +
                 "OUTPUT_START(0,1)\n"+
+                "OUTPUT_READY(0,1)\n"+
                 "OUTPUT_STEP_POWER(0,1,-75,180,0,0,1)\n" +
-                "OUTPUT_START(0,1)\n";
+                "OUTPUT_START(0,1)\n"+
+                "OUTPUT_READY(0,1)\n";
         return r;
     }
     
     private String salto_falso(String a,String b){
-        if(a.substring(0,2).equals("TB")){
+        if(a.length()>2 && a.substring(0,2).equals("TB")){
             return "JR_FALSE(eightRegister,"+b+")\n";
         }
         if(a.equals("false")){
@@ -360,7 +368,7 @@ public class CodigoLMS {
     }
     
     private String salto_verdadero(String a,String b){
-        if(a.substring(0,2).equals("TB")){
+        if(a.length()>2 && a.substring(0,2).equals("TB")){
             return "JR_TRUE(eightRegister,"+b+")\n";
         }
         if(a.equals("false")){
@@ -374,13 +382,13 @@ public class CodigoLMS {
     
     private String waitTime(String a){
         String r;
-        if(a.substring(0,2).equals("TA")){
-            r="MOV16_32(sixteenRegister,timeRegister)\n"
+        if(a.length()>2 && a.substring(0,2).equals("TA")){
+            r="MOVE16_32(sixteenRegister,timeRegister)\n"
                     + "MUL32(timeRegister,1000,timeRegister)\n"
                     + "TIMER_WAIT(timeRegister,timeCounter)\n"
                     +"TIMER_READY(timeCounter)\n";
         }else{
-            r="MOV16_32("+a+",timeRegister)\n"
+            r="MOVE16_32("+a+",timeRegister)\n"
                     + "MUL32(timeRegister,1000,timeRegister)\n"
                     + "TIMER_WAIT(timeRegister,timeCounter)\n"
                     +"TIMER_READY(timeCounter)\n";

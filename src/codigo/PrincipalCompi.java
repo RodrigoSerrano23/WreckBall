@@ -633,6 +633,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         } catch (Exception ex) {
             Symbol sym = s.getS();
             resultado = "\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
+            err.add(resultado);
         }
         if (err.isEmpty()) {
             error = new String[]{"Análisis realizado correctamente"};
