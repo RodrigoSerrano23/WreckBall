@@ -730,28 +730,46 @@ IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.tempb++;
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.choice++;
     :}|
     If Parentesis_a Op_booleano:o Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+o+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.choice++;
+    :}|
+    If Parentesis_a Identificador:i Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.status--;
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+i+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.choice++;
     :}|
     If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c ELSE {:
     PrincipalCompi.status--;
     PrincipalCompi.ifs=PrincipalCompi.s_bool;
-    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp choice"+PrincipalCompi.choice+":, , , )\n"+"choice"+(PrincipalCompi.choice+1)+":\n";
     PrincipalCompi.tempb++;
     PrincipalCompi.choice++;
-    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jmp choice"+PrincipalCompi.choice+":, , , )\n"+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.ifs=PrincipalCompi.ifs+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    PrincipalCompi.choice++;
     :}|
     If Parentesis_a Op_booleano:o Parentesis_c Llave_a SENTENCIA Llave_c ELSE {:
     PrincipalCompi.status--;
-    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+o+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+o+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp choice"+(PrincipalCompi.choice+1)+":, , , )\n"+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.tempb++;
     PrincipalCompi.choice++;
-    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jmp choice"+PrincipalCompi.choice+":, , , )\n"+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.ifs=PrincipalCompi.ifs+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    PrincipalCompi.choice++;
+    :} |
+    If Parentesis_a Identificador:i Parentesis_c Llave_a SENTENCIA Llave_c ELSE {:
+    PrincipalCompi.status--;
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+i+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp choice"+(PrincipalCompi.choice+1)+":, , , )\n"+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.choice++;
+    PrincipalCompi.ifs=PrincipalCompi.ifs+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    PrincipalCompi.choice++;
     :}
 ;
 ELSE ::=Else Llave_a SENTENCIA Llave_c {:
