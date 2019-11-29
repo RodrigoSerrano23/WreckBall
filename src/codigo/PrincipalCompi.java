@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -89,6 +90,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     public PrincipalCompi() {
         //tabla_simbolos
         //err.
+        err.clear();
         Object t=new Object();
         
         doc = new DefaultStyledDocument() {
@@ -358,6 +360,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -481,6 +484,14 @@ public class PrincipalCompi extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem3);
 
+        jMenuItem5.setText("Obtener lms");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Mostrar");
@@ -603,33 +614,25 @@ public class PrincipalCompi extends javax.swing.JFrame {
         temp = 0;
         choice = 0;
         loop = 0;
-
         String resultado;
         int n = jTable1.getRowCount();
-
         while (n > 0) {
             modelo.removeRow(n - 1);
             n--;
         }
-
         try {
             analizarLexico();
         } catch (IOException ex) {
             Logger.getLogger(PrincipalCompi.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         String ST = jTextPane1.getText();
         Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
-
         try {
             s.parse();
             resultado = "\nAnálisis realizado correctamente";
-            
-            //output.setText(resultado);
         } catch (Exception ex) {
             Symbol sym = s.getS();
             resultado = "\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
-            //output.setText(resultado);
         }
         if (err.isEmpty()) {
             error = new String[]{"Análisis realizado correctamente"};
@@ -698,8 +701,42 @@ public class PrincipalCompi extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        
+        String g=ci;
+        if(err.isEmpty()){
+            CodigoIntermedio ventanaci=new CodigoIntermedio(g);
+            ventanaci.show();
+        }else{
+            javax.swing.JOptionPane.showMessageDialog(null, "El código tiene errores");
+        }
     }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        try{
+        JFileChooser fiSa=new JFileChooser();
+        fiSa.showSaveDialog(this);
+        File f=fiSa.getSelectedFile();
+        String path=f.getPath();
+        String endpath=path.substring(path.length()-4,path.length());
+        if(!endpath.equals(".lms")){
+            f=new File(f.getPath()+".lms");
+        }
+        if(f.exists()){
+            f.delete(); 
+            
+        }
+            f.createNewFile();
+        
+        FileWriter fw=new FileWriter(f,true);
+        CodigoLMS cod=new CodigoLMS(ci);
+        String tx=cod.lms();
+        fw.write(tx);
+        fw.close();
+        }catch(IOException e){
+            javax.swing.JOptionPane.showMessageDialog(null,"No se pudo guardar el archivo.");
+        }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"El archivo debe ser .lms");
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     public void habilitarCampo(String dirnovo, String nomnovo) {
         this.setTitle("Compilador");
@@ -761,6 +798,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;

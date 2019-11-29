@@ -17,6 +17,7 @@ public class CodigoIntermedio extends javax.swing.JFrame {
      */
     public CodigoIntermedio(String ci) {
         initComponents();
+        setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
         this.ci=ci;
         jTextArea1.setText(ci);
     }
