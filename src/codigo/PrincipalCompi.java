@@ -645,6 +645,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         }
         jList2.setListData(error);
         jTextArea1.setText(ci);
+        jTextArea2.setText(new Optimizacion(ci).opt());
         System.out.println(tabla_simbolos.size());
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
