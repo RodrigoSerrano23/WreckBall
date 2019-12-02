@@ -595,7 +595,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         tabla_simbolos.clear();
         err.clear();
-        ci="";
 
         for (int i = 0; i <= 35; i++) {
             sentencia[i] = "";
@@ -638,6 +637,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         if (err.isEmpty()) {
             error = new String[]{"Análisis realizado correctamente"};
         } else {
+            ci="";
             error = new String[err.size()];
             for (int i = 0; i < err.size(); i++) {
                 error[i] = err.get(i);
