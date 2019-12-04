@@ -73,8 +73,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
     public static String fors;
     public static String s_for;
     public static String d_for;
-    public static int value;
-    public static boolean valueb;
+    public static Object value;
+    public static Object valueb;
 
     public static int temp;
     public static int tempb;
@@ -194,12 +194,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 case Linea:
                     //cont++;
                     //resultado += "LINEA " + cont + "\n";
-                    break;
-                case Comillas:
-                    modelo.addRow(new Object[]{"<Comillas>", lexer.lexeme});
-                    break;
-                case Cadena:
-                    modelo.addRow(new Object[]{"<Tipo de dato>", lexer.lexeme});
                     break;
                 case Int:
                     modelo.addRow(new Object[]{"<Tipo de dato entero>", lexer.lexeme});
@@ -321,6 +315,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
                     }
                     Symbol sym = s.getS();
                     modelo.addRow(new Object[]{"<Símbolo no definido>", sym.value});
+                    err.add("Error léxico linea:"+(sym.right+1)+"; el símbolo "+sym.value+" no ha sido definido en el lenguaje");
                     break;
                 default:
                     modelo.addRow(new Object[]{null, lexer.lexeme});
@@ -401,6 +396,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Tabla de Tokens", jScrollPane4);
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
         jTextArea1.setRows(5);
@@ -408,12 +404,14 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Código Interm.", jScrollPane2);
 
+        jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
         jScrollPane5.setViewportView(jTextArea2);
 
         jTabbedPane1.addTab("Código Optimizado", jScrollPane5);
 
+        jTextArea3.setEditable(false);
         jTextArea3.setColumns(20);
         jTextArea3.setRows(5);
         jScrollPane7.setViewportView(jTextArea3);
@@ -595,6 +593,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         tabla_simbolos.clear();
         err.clear();
+        value=null;
+        valueb=null;
 
         for (int i = 0; i <= 35; i++) {
             sentencia[i] = "";
@@ -632,7 +632,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         } catch (Exception ex) {
             Symbol sym = s.getS();
             resultado = "\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
-            err.add(resultado);
+            //err.add(resultado);
         }
         if (err.isEmpty()) {
             error = new String[]{"Análisis realizado correctamente"};

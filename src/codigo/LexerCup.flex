@@ -26,9 +26,6 @@ espacio=[ ,\t,\r,\n]+
 /* Comentarios */
 ( "//"(.)* ) {/*Ignore*/}
 
-/* Comillas */
-( "\"" ) {return new Symbol(sym.Comillas, yychar, yyline, yytext());}
-
 /* Tipos de dato entero */
 ( int ) {return new Symbol(sym.Int, yychar, yyline, yytext());}
 

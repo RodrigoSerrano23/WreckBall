@@ -11,10 +11,8 @@ package codigo;
  */
 public enum Tokens {
     Linea,
-    Comillas,
     Int,
     Bool,
-    Cadena,
     If,
     Else,
     Do,

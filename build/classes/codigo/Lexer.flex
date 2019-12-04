@@ -20,9 +20,6 @@ espacio=[ ,\t,\r]+
 /* Salto de linea */
 ( "\n" ) {return Linea;}
 
-/* Comillas */
-( "\"" ) {lexeme=yytext(); return Comillas;}
-
 /* Tipo de datos entero*/
 ( int ) {lexeme=yytext(); return Int;}
 
