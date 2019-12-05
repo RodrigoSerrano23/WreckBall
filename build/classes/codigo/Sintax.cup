@@ -31,8 +31,85 @@ INICIO ::=
     Start Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
     PrincipalCompi.ci=PrincipalCompi.sentencia[PrincipalCompi.status];
+    PrincipalCompi.gramatica="INICIO ::= Start Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c\n\n"+PrincipalCompi.gramatica;
     :}|
-    Start Parentesis_a Parentesis_c Llave_a Llave_c
+    Start Parentesis_a Parentesis_c Llave_a SENTENCIA:i {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta una llave de cierre");
+    PrincipalCompi.gramatica="INICIO ::= Start Parentesis_a Parentesis_c Llave_a SENTENCIA >>Llave_c<<\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Start Parentesis_a Parentesis_c:i SENTENCIA Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta una llave de apertura");
+    PrincipalCompi.gramatica="INICIO ::= Start Parentesis_a Parentesis_c >>Llave_a<< SENTENCIA Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Start Parentesis_a:i Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un paréntesis de cierre");
+    PrincipalCompi.gramatica="INICIO ::= Start Parentesis_a >>Parentesis_c<< Llave_a SENTENCIA Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Start:i Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un paréntesis de apertura");
+    PrincipalCompi.gramatica="INICIO ::= Start >>Parentesis_a<< Parentesis_c Llave_a SENTENCIA Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Identificador:i Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c\n\n"+PrincipalCompi.gramatica;
+    :}|
+    Identificador:i Parentesis_a Parentesis_c Llave_a SENTENCIA {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Identificador:i Parentesis_a Parentesis_c SENTENCIA Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Identificador:i Parentesis_a Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Identificador:i Parentesis_c Llave_a SENTENCIA Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a SENTENCIA Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+
+
+    Start Parentesis_a Parentesis_c Llave_a Llave_c {:
+    PrincipalCompi.gramatica="INICIO ::= Start Parentesis_a Parentesis_c Llave_a Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Start Parentesis_a Parentesis_c Llave_a:i {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta una llave de cierre");
+    PrincipalCompi.gramatica="INICIO ::= Start Parentesis_a Parentesis_c Llave_a >>Llave_c<<\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Start Parentesis_a Parentesis_c:i Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta una llave de apertura");
+    PrincipalCompi.gramatica="INICIO ::= Start Parentesis_a Parentesis_c >>Llave_a<< Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Start Parentesis_a:i Llave_a Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un paréntesis de cierre");
+    PrincipalCompi.gramatica="INICIO ::= Start Parentesis_a >>Parentesis_c<< Llave_a Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Start:i Parentesis_c Llave_a Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un paréntesis de apertura");
+    PrincipalCompi.gramatica="INICIO ::= Start >>Parentesis_a<< Parentesis_c Llave_a Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Identificador:i Parentesis_a Parentesis_c Llave_a Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a Llave_c\n\n"+PrincipalCompi.gramatica;
+    :}|
+    Identificador:i Parentesis_a Parentesis_c Llave_a {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Identificador:i Parentesis_a Parentesis_c Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Identificador:i Parentesis_a Llave_a Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
+    Identificador:i Parentesis_c Llave_a Llave_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; comienzo de programa incorrecto");
+    PrincipalCompi.gramatica="INICIO ::= >>Start<< Parentesis_a Parentesis_c Llave_a Llave_c\n\n"+PrincipalCompi.gramatica;
+    :} |
 ;
 SENTENCIA ::= 
     SENTENCIA DECLARACION {:
@@ -40,55 +117,65 @@ SENTENCIA ::=
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.declaracion;
     PrincipalCompi.declaracion="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= SENTENCIA DECLARACION\n\n"+PrincipalCompi.gramatica;
     :}|
     DECLARACION {:
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.declaracion;
     PrincipalCompi.declaracion="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= DECLARACION\n\n"+PrincipalCompi.gramatica;
     :}|
     SENTENCIA IF {:
     PrincipalCompi.status--;
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.ifs;
     PrincipalCompi.ifs="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= SENTENCIA IF\n\n"+PrincipalCompi.gramatica;
     :}| 
     IF {:
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.ifs;
     PrincipalCompi.ifs="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= IF\n\n"+PrincipalCompi.gramatica;
     :}|
     SENTENCIA WHILE {:
     PrincipalCompi.status--;
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.whiles;
     PrincipalCompi.whiles="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= SENTENCIA WHILE\n\n"+PrincipalCompi.gramatica;
     :} |
     WHILE {:
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.whiles;
     PrincipalCompi.whiles="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= WHILE\n\n"+PrincipalCompi.gramatica;
     :} |
     SENTENCIA DO_WHILE {:
     PrincipalCompi.status--;
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.dowhiles;
     PrincipalCompi.dowhiles="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= SENTENCIA DO_WHILE\n\n"+PrincipalCompi.gramatica;
     :} |
     DO_WHILE {:
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.dowhiles;
     PrincipalCompi.dowhiles="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= DO_WHILE\n\n"+PrincipalCompi.gramatica;
     :} |
     SENTENCIA FOR {:
     PrincipalCompi.status--;
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.fors;
     PrincipalCompi.fors="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= SENTENCIA FOR\n\n"+PrincipalCompi.gramatica;
     :} |
     FOR {:
     PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.fors;
     PrincipalCompi.fors="";
     PrincipalCompi.status++;
+    PrincipalCompi.gramatica="SENTENCIA ::= FOR\n\n"+PrincipalCompi.gramatica;
     :}
 ;
 DECLARACION ::= 
@@ -99,28 +186,34 @@ DECLARACION ::=
     Simbolo s=new Simbolo(i,t,null);
     if(PrincipalCompi.tabla_simbolos.isEmpty()){
         PrincipalCompi.tabla_simbolos.add(s);
+        PrincipalCompi.gramatica="DECLARACION ::= Int:t Identificador:i P_coma\n\n"+PrincipalCompi.gramatica;
     }else{
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             temp=PrincipalCompi.tabla_simbolos.get(it);
             if(temp.getNombre().equals(i)){
                 PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" ya fue declarado anteriormente");
+                PrincipalCompi.gramatica="DECLARACION ::= Int:t >>Identificador:i<< P_coma\n\n"+PrincipalCompi.gramatica;
                 n++;
                 break;
             }
         }
         if(n==0){
             PrincipalCompi.tabla_simbolos.add(s);
+            PrincipalCompi.gramatica="DECLARACION ::= Int:t Identificador:i P_coma\n\n"+PrincipalCompi.gramatica;
         }
     }
     :} |
     Int:t Identificador:i {:
     PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un punto y coma al final de la sentencia");
+    PrincipalCompi.gramatica="DECLARACION ::= Int:t Identificador:i >>P_coma<<\n\n"+PrincipalCompi.gramatica;
     :} |
     Int:t P_coma {:
     PrincipalCompi.err.add("Error sintáctico linea:"+(tright+1)+"; falta la declaración de un identificador");
+    PrincipalCompi.gramatica="DECLARACION ::= Int:t >>Identificador:i<< P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
     Identificador:i P_coma {:
     PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta la asignación de un tipo de dato");
+    PrincipalCompi.gramatica="DECLARACION ::= >>Int:t<< Identificador:i P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
 
 
@@ -131,17 +224,20 @@ DECLARACION ::=
     Simbolo s=new Simbolo(i,t,null);
     if(PrincipalCompi.tabla_simbolos.isEmpty()){
         PrincipalCompi.tabla_simbolos.add(s);
+        PrincipalCompi.gramatica="DECLARACION ::= Bool:t Identificador:i P_coma\n\n"+PrincipalCompi.gramatica;
     }else{
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             temp=PrincipalCompi.tabla_simbolos.get(it);
             if(temp.getNombre().equals(i)){
                 PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" ya fue declarado anteriormente");
+                PrincipalCompi.gramatica="DECLARACION ::= Bool:t >>Identificador:i<< P_coma\n\n"+PrincipalCompi.gramatica;
                 n++;
                 break;
             }
         }
         if(n==0){
             PrincipalCompi.tabla_simbolos.add(s);
+            PrincipalCompi.gramatica="DECLARACION ::= Bool:t Identificador:i P_coma\n\n"+PrincipalCompi.gramatica;
         }
     }
     :} |
@@ -177,6 +273,7 @@ DECLARACION ::=
                         Object v=temp.getValor();
                         Simbolo s=new Simbolo(i,t,v);
                         PrincipalCompi.tabla_simbolos.add(s);
+                        PrincipalCompi.gramatica="DECLARACION ::= Int:t Identificador:i Igual:g Identificador:l P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -229,6 +326,7 @@ DECLARACION ::=
                         Object v=temp.getValor();
                         Simbolo s=new Simbolo(i,t,v);
                         PrincipalCompi.tabla_simbolos.add(s);
+                        PrincipalCompi.gramatica="DECLARACION ::= Bool:t Identificador:i Igual:g Identificador:l P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -282,6 +380,7 @@ DECLARACION ::=
                                 n++;
                                 Object v=temp2.getValor();
                                 temp.setValor(v);
+                                PrincipalCompi.gramatica="DECLARACION ::= Identificador:a Igual:g Identificador:b P_coma\n\n"+PrincipalCompi.gramatica;
                                 break;
                             }
                         }else{
@@ -331,6 +430,7 @@ DECLARACION ::=
             a=new Simbolo(i,t,PrincipalCompi.value);
             PrincipalCompi.tabla_simbolos.add(a);
             PrincipalCompi.value=null;
+            PrincipalCompi.gramatica="DECLARACION ::= Int:t Identificador:i Igual:g SENTENCIA_ARITMETICA P_coma\n\n"+PrincipalCompi.gramatica;
         }else{
             PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" ya fue declarado anteriormente");
         }
@@ -360,6 +460,7 @@ DECLARACION ::=
         }else{
             if(a.getTipo().toString().equals("int")){
                 a.setValor(PrincipalCompi.value);
+                PrincipalCompi.gramatica="DECLARACION ::= Identificador:i Igual:g SENTENCIA_ARITMETICA P_coma\n\n"+PrincipalCompi.gramatica;
                 PrincipalCompi.value=null;
             }else{
                 PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no es de tipo int");
@@ -390,6 +491,7 @@ DECLARACION ::=
         if(a==null){
             a=new Simbolo(i,t,PrincipalCompi.valueb);
             PrincipalCompi.tabla_simbolos.add(a);
+            PrincipalCompi.gramatica="DECLARACION ::= Bool:t Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma\n\n"+PrincipalCompi.gramatica;
             PrincipalCompi.valueb=null;
         }else{
             PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" ya fue declarado anteriormente");
@@ -398,6 +500,12 @@ DECLARACION ::=
     /*Bool:t Identificador:i Igual:g SENTENCIA_BOOLEANA {:
     PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un punto y coma al final de la sentencia");
     :} |*/
+    /*Bool:t Identificador:i SENTENCIA_BOOLEANA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un signo de igual");
+    :} |*/
+    Bool:t Igual:g SENTENCIA_BOOLEANA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(tright+1)+"; falta la declaración de un identificador");
+    :} |
 
 
     Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma {:
@@ -415,12 +523,23 @@ DECLARACION ::=
         }else{
             if(a.getTipo().toString().equals("bool")){
                 a.setValor(PrincipalCompi.valueb);
+                PrincipalCompi.gramatica="DECLARACION ::= Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma\n\n"+PrincipalCompi.gramatica;
                 PrincipalCompi.valueb=null;
             }else{
                 PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no es de tipo bool");
             }
         }
     :} |
+    /*Identificador:i Igual:g SENTENCIA_BOOLEANA {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |*/
+    /*Identificador:i SENTENCIA_BOOLEANA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un signo de igual");
+    :} |*/
+    /*Igual:g SENTENCIA_BOOLEANA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un identificador declarado");
+    :} |*/
+
 
     Identificador:i Op_incremento:o P_coma {:
     PrincipalCompi.declaracion="("+o+", , ,"+i+")\n";
@@ -442,6 +561,7 @@ DECLARACION ::=
                         num++;
                         temp.setValor(num);
                         n++;
+                        PrincipalCompi.gramatica="DECLARACION ::= Identificador:i Op_incremento:o P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -456,6 +576,13 @@ DECLARACION ::=
         }
     }
     :} |
+    Identificador:i Op_incremento:o {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    Op_incremento:o P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(oright+1)+"; falta un identificador declarado");
+    :} |
+
 
     Int:t Identificador:i Igual:g Numero:n P_coma{:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+n+", ,"+i+")\n";
@@ -464,6 +591,7 @@ DECLARACION ::=
     Simbolo temp=null;
     if(PrincipalCompi.tabla_simbolos.isEmpty()){
         PrincipalCompi.tabla_simbolos.add(s);
+        PrincipalCompi.gramatica="DECLARACION ::= Int:t Identificador:i Igual:g Numero:n P_coma\n\n"+PrincipalCompi.gramatica;
     }else{
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             temp=PrincipalCompi.tabla_simbolos.get(it);
@@ -475,9 +603,20 @@ DECLARACION ::=
         }
         if(num==0){
             PrincipalCompi.tabla_simbolos.add(s);
+            PrincipalCompi.gramatica="DECLARACION ::= Int:t Identificador:i Igual:g Numero:n P_coma\n\n"+PrincipalCompi.gramatica;
         }
     }
     :} |
+    Int:t Identificador:i Igual:g Numero:n {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    Int:t Identificador:i Numero:n P_coma{:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un signo de igual");
+    :} |
+    Int:t Igual:g Numero:n P_coma{:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(tright+1)+"; falta la declaración de un identificador");
+    :} |
+
 
     Identificador:i Igual:g Numero:n P_coma{:
     PrincipalCompi.declaracion="("+g+","+n+", ,"+i+")\n";
@@ -492,6 +631,7 @@ DECLARACION ::=
                 if(temp.getTipo().toString().equals("int")){
                     temp.setValor(n);
                     num++;
+                    PrincipalCompi.gramatica="DECLARACION ::= Identificador:i Igual:g Numero:n P_coma\n\n"+PrincipalCompi.gramatica;
                     break;
                 }else{
                     PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no es de tipo entero");
@@ -505,6 +645,16 @@ DECLARACION ::=
         }
     }
     :} |
+    Identificador:i Igual:g Numero:n {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    Identificador:i Numero:n P_coma{:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un signo de igual");
+    :} |
+    /*Igual:g Numero:n P_coma{:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un identificador declarado");
+    :} |*/
+
 
     Bool:t Identificador:i Igual:g Op_booleano:o P_coma{:
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n("+g+","+o+", ,"+i+")\n";
@@ -513,6 +663,7 @@ DECLARACION ::=
     Simbolo temp=null;
     if(PrincipalCompi.tabla_simbolos.isEmpty()){
         PrincipalCompi.tabla_simbolos.add(s);
+        PrincipalCompi.gramatica="DECLARACION ::= Bool:t Identificador:i Igual:g Op_booleano:o P_coma\n\n"+PrincipalCompi.gramatica;
     }else{
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             temp=PrincipalCompi.tabla_simbolos.get(it);
@@ -524,9 +675,20 @@ DECLARACION ::=
         }
         if(num==0){
             PrincipalCompi.tabla_simbolos.add(s);
+            PrincipalCompi.gramatica="DECLARACION ::= Bool:t Identificador:i Igual:g Op_booleano:o P_coma\n\n"+PrincipalCompi.gramatica;
         }
     }
     :} |
+    Bool:t Identificador:i Igual:g Op_booleano:o {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    Bool:t Identificador:i Op_booleano:o P_coma{:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un signo de igual");
+    :} |
+    Bool:t Igual:g Op_booleano:o P_coma{:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(tright+1)+"; falta la declaración de un identificador");
+    :} |
+
 
     Identificador:i Igual:g Op_booleano:o P_coma{:
     PrincipalCompi.declaracion="("+g+","+o+", ,"+i+")\n";
@@ -541,6 +703,7 @@ DECLARACION ::=
                 if(temp.getTipo().toString().equals("bool")){
                     temp.setValor(o);
                     num++;
+                    PrincipalCompi.gramatica="DECLARACION ::= Identificador:i Igual:g Op_booleano:o P_coma\n\n"+PrincipalCompi.gramatica;
                     break;
                 }else{
                     PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no es de tipo bool");
@@ -554,13 +717,52 @@ DECLARACION ::=
         }
     }
     :} |
+    Identificador:i Igual:g Op_booleano:o {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    Identificador:i Op_booleano:o P_coma{:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un signo de igual");
+    :} |
+    /*Igual:g Op_booleano:o P_coma{:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(iright+1)+"; falta un identificador declarado");
+    :} |*/
+
 
     SpinCraneLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     PrincipalCompi.value=null;
+    PrincipalCompi.gramatica="DECLARACION ::= SpinCraneLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    SpinCraneLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinCraneLeft:a Parentesis_a SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinCraneLeft:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un argumento");
+    :} |
+    SpinCraneLeft:a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+    Identificador:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a Parentesis_a SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+
 
     SpinCraneLeft:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
@@ -579,6 +781,7 @@ DECLARACION ::=
                         break;
                     }else{
                         n++;
+                        PrincipalCompi.gramatica="DECLARACION ::= SpinCraneLeft:a Parentesis_a Identificador:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -593,17 +796,76 @@ DECLARACION ::=
         }
     }
     :} |
+    SpinCraneLeft:a Parentesis_a Identificador:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinCraneLeft:a Parentesis_a Identificador:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinCraneLeft:a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+    Identificador:a Parentesis_a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a Parentesis_a Identificador:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a Parentesis_a Identificador:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+
 
     SpinCraneLeft:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    PrincipalCompi.gramatica="DECLARACION ::= SpinCraneLeft:a Parentesis_a Numero:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    SpinCraneLeft:a Parentesis_a Numero:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinCraneLeft:a Parentesis_a Numero:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinCraneLeft:a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+    Identificador:a Parentesis_a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a Parentesis_a Numero:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a Parentesis_a Numero:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+    Identificador:a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; método desconocido");
+    :} |
+
 
     SpinCraneRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     PrincipalCompi.value=null;
+    PrincipalCompi.gramatica="DECLARACION ::= SpinCraneRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    SpinCraneRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinCraneRight:a Parentesis_a SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinCraneRight:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un argumento");
+    :} |
+    SpinCraneRight:a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     SpinCraneRight:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
@@ -622,6 +884,7 @@ DECLARACION ::=
                         break;
                     }else{
                         n++;
+                        PrincipalCompi.gramatica="DECLARACION ::= SpinCraneRight:a Parentesis_a Identificador:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -636,17 +899,52 @@ DECLARACION ::=
         }
     }
     :} |
+    SpinCraneRight:a Parentesis_a Identificador:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinCraneRight:a Parentesis_a Identificador:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinCraneRight:a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     SpinCraneRight:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    PrincipalCompi.gramatica="DECLARACION ::= SpinCraneRight:a Parentesis_a Numero:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    SpinCraneRight:a Parentesis_a Numero:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinCraneRight:a Parentesis_a Numero:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinCraneRight:a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     MoveFowardCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     PrincipalCompi.value=null;
+    PrincipalCompi.gramatica="DECLARACION ::= MoveFowardCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    MoveFowardCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    MoveFowardCrane:a Parentesis_a SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    MoveFowardCrane:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un argumento");
+    :} |
+    MoveFowardCrane:a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     MoveFowardCrane:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
@@ -665,6 +963,7 @@ DECLARACION ::=
                         break;
                     }else{
                         n++;
+                        PrincipalCompi.gramatica="DECLARACION ::= MoveFowardCrane:a Parentesis_a Identificador:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -679,17 +978,52 @@ DECLARACION ::=
         }
     }
     :} |
+    MoveFowardCrane:a Parentesis_a Identificador:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    MoveFowardCrane:a Parentesis_a Identificador:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    MoveFowardCrane:a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     MoveFowardCrane:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    PrincipalCompi.gramatica="DECLARACION ::= MoveFowardCrane:a Parentesis_a Numero:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    MoveFowardCrane:a Parentesis_a Numero:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    MoveFowardCrane:a Parentesis_a Numero:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    MoveFowardCrane:a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     MoveBackCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     PrincipalCompi.value=null;
+    PrincipalCompi.gramatica="DECLARACION ::= MoveBackCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    MoveBackCrane:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    MoveBackCrane:a Parentesis_a SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    MoveBackCrane:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un argumento");
+    :} |
+    MoveBackCrane:a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     MoveBackCrane:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
@@ -708,6 +1042,7 @@ DECLARACION ::=
                         break;
                     }else{
                         n++;
+                        PrincipalCompi.gramatica="DECLARACION ::= MoveBackCrane:a Parentesis_a Identificador:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -722,17 +1057,52 @@ DECLARACION ::=
         }
     }
     :} |
+    MoveBackCrane:a Parentesis_a Identificador:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    MoveBackCrane:a Parentesis_a Identificador:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    MoveBackCrane:a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     MoveBackCrane:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    PrincipalCompi.gramatica="DECLARACION ::= MoveBackCrane:a Parentesis_a Numero:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    MoveBackCrane:a Parentesis_a Numero:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    MoveBackCrane:a Parentesis_a Numero:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    MoveBackCrane:a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     SpinBallLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     PrincipalCompi.value=null;
+    PrincipalCompi.gramatica="DECLARACION ::= SpinBallLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    SpinBallLeft:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinBallLeft:a Parentesis_a SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinBallLeft:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un argumento");
+    :} |
+    SpinBallLeft:a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     SpinBallLeft:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
@@ -751,6 +1121,7 @@ DECLARACION ::=
                         break;
                     }else{
                         n++;
+                        PrincipalCompi.gramatica="DECLARACION ::= SpinBallLeft:a Parentesis_a Identificador:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -765,17 +1136,52 @@ DECLARACION ::=
         }
     }
     :} |
+    SpinBallLeft:a Parentesis_a Identificador:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinBallLeft:a Parentesis_a Identificador:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinBallLeft:a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     SpinBallLeft:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    PrincipalCompi.gramatica="DECLARACION ::= SpinBallLeft:a Parentesis_a Numero:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    SpinBallLeft:a Parentesis_a Numero:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinBallLeft:a Parentesis_a Numero:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinBallLeft:a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     SpinBallRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     PrincipalCompi.value=null;
+    PrincipalCompi.gramatica="DECLARACION ::= SpinBallRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    SpinBallRight:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinBallRight:a Parentesis_a SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinBallRight:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un argumento");
+    :} |
+    SpinBallRight:a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     SpinBallRight:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
@@ -794,6 +1200,7 @@ DECLARACION ::=
                         break;
                     }else{
                         n++;
+                        PrincipalCompi.gramatica="DECLARACION ::= SpinBallRight:a Parentesis_a Identificador:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -808,29 +1215,91 @@ DECLARACION ::=
         }
     }
     :} |
+    SpinBallRight:a Parentesis_a Identificador:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinBallRight:a Parentesis_a Identificador:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinBallRight:a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     SpinBallRight:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
+    PrincipalCompi.gramatica="DECLARACION ::= SpinBallRight:a Parentesis_a Numero:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    SpinBallRight:a Parentesis_a Numero:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    SpinBallRight:a Parentesis_a Numero:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    SpinBallRight:a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     HitToTheLeft:a Parentesis_a Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+", , , )\n";
+    PrincipalCompi.gramatica="DECLARACION ::= HitToTheLeft:a Parentesis_a Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    HitToTheLeft:a Parentesis_a Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    HitToTheLeft:a Parentesis_a P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    HitToTheLeft:a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     HitToTheRight:a Parentesis_a Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+", , , )\n";
+    PrincipalCompi.gramatica="DECLARACION ::= HitToTheRight:a Parentesis_a Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    HitToTheRight:a Parentesis_a Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    HitToTheRight:a Parentesis_a P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    HitToTheRight:a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     StopLoop P_coma {:
     PrincipalCompi.declaracion="(jmp loop"+PrincipalCompi.loop+":, , , )\n";
+    PrincipalCompi.gramatica="DECLARACION ::= StopLoop P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    StopLoop:a {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+
 
     WaitTime:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
     PrincipalCompi.declaracion=PrincipalCompi.s_arit+"("+a+",TA"+PrincipalCompi.temp+", , )\n";
     PrincipalCompi.temp++;
     PrincipalCompi.s_arit="";
     PrincipalCompi.value=null;
+    PrincipalCompi.gramatica="DECLARACION ::= WaitTime:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
     :} |
+    WaitTime:a Parentesis_a SENTENCIA_ARITMETICA Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    WaitTime:a Parentesis_a SENTENCIA_ARITMETICA P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    WaitTime:a Parentesis_a Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un argumento");
+    :} |
+    WaitTime:a SENTENCIA_ARITMETICA Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     WaitTime:a Parentesis_a Identificador:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
@@ -849,6 +1318,7 @@ DECLARACION ::=
                         break;
                     }else{
                         n++;
+                        PrincipalCompi.gramatica="DECLARACION ::= WaitTime:a Parentesis_a Identificador:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
                         break;
                     }
                 }else{
@@ -863,10 +1333,30 @@ DECLARACION ::=
         }
     }
     :} |
+    WaitTime:a Parentesis_a Identificador:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    WaitTime:a Parentesis_a Identificador:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    WaitTime:a Identificador:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :} |
+
 
     WaitTime:a Parentesis_a Numero:i Parentesis_c P_coma {:
     PrincipalCompi.declaracion="("+a+","+i+", , )\n";
-    :} 
+    PrincipalCompi.gramatica="DECLARACION ::= WaitTime:a Parentesis_a Numero:i Parentesis_c P_coma\n\n"+PrincipalCompi.gramatica;
+    :} |
+    WaitTime:a Parentesis_a Numero:i Parentesis_c {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un punto y coma al final de la sentencia");
+    :} |
+    WaitTime:a Parentesis_a Numero:i P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de cierre");
+    :} |
+    WaitTime:a Numero:i Parentesis_c P_coma {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(aright+1)+"; falta un paréntesis de apertura");
+    :}
     
 ;
 IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c {:
@@ -878,6 +1368,14 @@ IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
     PrincipalCompi.choice++;
     PrincipalCompi.valueb=null;
     :}|
+    /*If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA:s {:
+    PrincipalCompi.err.add("Error sintáctico linea:"+(sright+1)+"; falta un paréntesis de cierre");
+    :} |*/
+
+
+    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a Llave_c |
+
+
     If Parentesis_a Op_booleano:o Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+o+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";

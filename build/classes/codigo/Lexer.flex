@@ -131,5 +131,8 @@ espacio=[ ,\t,\r]+
 /* Numero */
 ("(-"{D}+")")|{D}+ {lexeme=yytext(); return Numero;}
 
+/* Sentencia Desconocida */
+//^(("start")|(.))+ {lexeme=yytext(); return Desconocido;}
+
 /* Error de analisis */
  . {return ERROR;}

@@ -86,6 +86,8 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
     public static String[] error;
     public static ArrayList<String> err = new ArrayList<>();
+    
+    public static String gramatica;
 
     public PrincipalCompi() {
         //tabla_simbolos
@@ -243,6 +245,9 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 case HitToTheRight:
                     modelo.addRow(new Object[]{"<Método hitToTheRight>", lexer.lexeme});
                     break;
+                case WaitTime:
+                    modelo.addRow(new Object[]{"<Método WaitTime>", lexer.lexeme});
+                    break;
                 case Igual:
                     modelo.addRow(new Object[]{"<Operador igual>", lexer.lexeme});
                     break;
@@ -306,7 +311,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 case ERROR:
                     String ST = jTextPane1.getText();
                     Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
-                     {
+                    {
                         try {
                             s.parse();
                         } catch (Exception ex) {
@@ -359,7 +364,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -406,6 +410,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
         jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
+        jTextArea2.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
         jTextArea2.setRows(5);
         jScrollPane5.setViewportView(jTextArea2);
 
@@ -413,6 +418,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
         jTextArea3.setEditable(false);
         jTextArea3.setColumns(20);
+        jTextArea3.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
         jTextArea3.setRows(5);
         jScrollPane7.setViewportView(jTextArea3);
 
@@ -495,7 +501,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         jMenu3.setText("Mostrar");
 
         jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem4.setText("Automata finito");
+        jMenuItem4.setText("Gramática");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);
@@ -511,15 +517,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem6);
-
-        jMenuItem7.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem7.setText("Código Interm.");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem7);
 
         jMenuBar1.add(jMenu3);
 
@@ -595,6 +592,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         err.clear();
         value=null;
         valueb=null;
+        gramatica="";
 
         for (int i = 0; i <= 35; i++) {
             sentencia[i] = "";
@@ -633,6 +631,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
             Symbol sym = s.getS();
             resultado = "\nError de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
             //err.add(resultado);
+            //err.add("Error sintáctico linea:"+(sym.right+1)+"; sentencia incomprensible. Imposible seguir analizando");
         }
         if (err.isEmpty()) {
             error = new String[]{"Análisis realizado correctamente"};
@@ -643,6 +642,17 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 error[i] = err.get(i);
             }
         }
+        gramatica="terminal Linea, Int, Bool, If, Else, Do, While, For, StopLoop,\n" +
+"    SpinCraneLeft, SpinCraneRight, MoveFowardCrane, MoveBackCrane,\n" +
+"    SpinBallLeft, SpinBallRight, HitToTheLeft, HitToTheRight,\n" +
+"    Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,\n" +
+"    Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,\n" +
+"    Llave_a, Llave_c, Corchete_a, Corchete_c, Start, P_coma, Identificador,\n" +
+"    Numero, WaitTime, ERROR;\n\n" +
+"non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, ELSE,\n" +
+"    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_ARITMETICA, SENTENCIA_FOR;\n" +
+"\n" +
+"start with INICIO;\n\n"+gramatica;
         jList2.setListData(error);
         jTextArea1.setText(ci);
         jTextArea2.setText(new Optimizacion(ci).opt());
@@ -692,26 +702,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
-        Automata a=new Automata(this, true, this);
-        a.setVisible(true);
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
-
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
-
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        String g=ci;
-        if(err.isEmpty()){
-            CodigoIntermedio ventanaci=new CodigoIntermedio(g);
-            ventanaci.show();
-        }else{
-            javax.swing.JOptionPane.showMessageDialog(null, "El código tiene errores");
-        }
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
-
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try{
         JFileChooser fiSa=new JFileChooser();
@@ -739,6 +729,16 @@ public class PrincipalCompi extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null,"El archivo debe ser .lms");
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        Automata a=new Automata(this, true, this, gramatica);
+        a.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     public void habilitarCampo(String dirnovo, String nomnovo) {
         this.setTitle("Compilador");
@@ -802,7 +802,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

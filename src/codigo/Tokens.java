@@ -48,5 +48,6 @@ public enum Tokens {
     P_coma,
     Identificador,
     Numero,
+    //Desconocido,
     ERROR
 }

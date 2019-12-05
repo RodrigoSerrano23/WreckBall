@@ -5,10 +5,11 @@
         <group>
             <file>file:/C:/Users/kid_d/OneDrive/Documentos/NetBeansProjects/WreckBall/src/codigo/Sintax.cup</file>
             <file>file:/C:/Users/kid_d/OneDrive/Documentos/NetBeansProjects/WreckBall/src/codigo/Simbolo.java</file>
+            <file>file:/C:/Users/kid_d/OneDrive/Documentos/NetBeansProjects/WreckBall/src/codigo/LexerCup.java</file>
+            <file>file:/C:/Users/kid_d/OneDrive/Documentos/NetBeansProjects/WreckBall/src/codigo/sym.java</file>
             <file>file:/C:/Users/kid_d/OneDrive/Documentos/NetBeansProjects/WreckBall/src/codigo/LexerCup.flex</file>
             <file>file:/C:/Users/kid_d/OneDrive/Documentos/NetBeansProjects/WreckBall/src/codigo/PrincipalCompi.java</file>
             <file>file:/C:/Users/kid_d/OneDrive/Documentos/NetBeansProjects/WreckBall/src/codigo/Tokens.java</file>
-            <file>file:/C:/Users/kid_d/OneDrive/Documentos/NetBeansProjects/WreckBall/src/codigo/Sintax.java</file>
             <file>file:/C:/Users/kid_d/OneDrive/Documentos/NetBeansProjects/WreckBall/src/codigo/Lexer.flex</file>
         </group>
     </open-files>

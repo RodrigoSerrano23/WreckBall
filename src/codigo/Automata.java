@@ -20,11 +20,12 @@ public class Automata extends javax.swing.JDialog {
         initComponents();
     }
     
-    public Automata(java.awt.Frame parent, boolean modal, PrincipalCompi padre) {
+    public Automata(java.awt.Frame parent, boolean modal, PrincipalCompi padre, String g) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
         this.padre=padre;
+        jTextArea1.setText(g);
     }
 
     /**
@@ -46,7 +47,9 @@ public class Automata extends javax.swing.JDialog {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/automata_compilador.jpeg"))); // NOI18N
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -79,8 +82,8 @@ public class Automata extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 22, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+                .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(

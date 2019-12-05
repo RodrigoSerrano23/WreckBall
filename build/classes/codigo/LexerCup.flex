@@ -137,6 +137,8 @@ espacio=[ ,\t,\r,\n]+
 /* Numero */
 ("(-"{D}+")")|{D}+ {return new Symbol(sym.Numero, yychar, yyline, yytext());}
 
+/* Sentencia Desconocida */
+//^(("start")|(.))+ {return new Symbol(sym.Desconocido, yychar, yyline, yytext());}
 
 /* Error de analisis */
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}
