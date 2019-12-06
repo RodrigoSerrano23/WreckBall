@@ -1706,10 +1706,12 @@ SENTENCIA_BOOLEANA ::=
 SENTENCIA_ARITMETICA ::=
     Numero:n Suma:s Numero:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
-        PrincipalCompi.value=Integer.parseInt(n.toString())+Integer.parseInt(i.toString());
+    PrincipalCompi.value=Integer.parseInt(n.toString())+Integer.parseInt(i.toString());
+    PrincipalCompi.expresiones.add(n+""+s+""+i);
     :} |
     Identificador:i Suma:s Numero:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(i+""+s+""+n);
         Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1732,6 +1734,7 @@ SENTENCIA_ARITMETICA ::=
     :} |
     Numero:n Suma:s Identificador:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(n+""+s+""+i);
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1755,6 +1758,7 @@ SENTENCIA_ARITMETICA ::=
     :} |
     Identificador:i Suma:s Identificador:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(i+""+s+""+n);
     Simbolo a=null;
     Simbolo b=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
@@ -1799,9 +1803,11 @@ SENTENCIA_ARITMETICA ::=
     Numero:n Resta:s Numero:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
     PrincipalCompi.value=Integer.parseInt(n.toString())-Integer.parseInt(i.toString());
+    PrincipalCompi.expresiones.add(n+""+s+""+i);
     :} |
     Identificador:i Resta:s Numero:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(i+""+s+""+n);
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1824,6 +1830,7 @@ SENTENCIA_ARITMETICA ::=
     :} |
     Numero:n Resta:s Identificador:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(n+""+s+""+i);
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1847,6 +1854,7 @@ SENTENCIA_ARITMETICA ::=
     :} |
     Identificador:i Resta:s Identificador:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(i+""+s+""+n);
     Simbolo a=null;
     Simbolo b=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
@@ -1890,9 +1898,11 @@ SENTENCIA_ARITMETICA ::=
     Numero:n Multiplicacion:s Numero:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
     PrincipalCompi.value=Integer.parseInt(n.toString())*Integer.parseInt(i.toString());
+    PrincipalCompi.expresiones.add(n+""+s+""+i);
     :} |
     Identificador:i Multiplicacion:s Numero:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(i+""+s+""+n);
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1915,6 +1925,7 @@ SENTENCIA_ARITMETICA ::=
     :} |
     Numero:n Multiplicacion:s Identificador:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(n+""+s+""+i);
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1938,6 +1949,7 @@ SENTENCIA_ARITMETICA ::=
     :} |
     Identificador:i Multiplicacion:s Identificador:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(i+""+s+""+n);
     Simbolo a=null;
     Simbolo b=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
@@ -1981,9 +1993,11 @@ SENTENCIA_ARITMETICA ::=
     Numero:n Division:s Numero:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
     PrincipalCompi.value=Integer.parseInt(n.toString())/Integer.parseInt(i.toString());
+    PrincipalCompi.expresiones.add(n+""+s+""+i);
     :} |
     Identificador:i Division:s Numero:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(i+""+s+""+n);
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre())){
@@ -2006,6 +2020,7 @@ SENTENCIA_ARITMETICA ::=
     :} |
     Numero:n Division:s Identificador:i {:
     PrincipalCompi.s_arit="("+s+","+n+","+i+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(n+""+s+""+i);
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -2029,6 +2044,7 @@ SENTENCIA_ARITMETICA ::=
     :} |
     Identificador:i Division:s Identificador:n {:
     PrincipalCompi.s_arit="("+s+","+i+","+n+",TA"+PrincipalCompi.temp+")\n";
+    PrincipalCompi.expresiones.add(i+""+s+""+n);
     Simbolo a=null;
     Simbolo b=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){

@@ -41,12 +41,12 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
 public class PrincipalCompi extends javax.swing.JFrame {
-    
+
     JFileChooser seleccionado = new JFileChooser();
     File archivo;
     byte[] bytesImg;
     GestionA gestion = new GestionA();
-    
+
     DefaultTableModel modelo;
 
     DefaultStyledDocument doc;
@@ -86,17 +86,17 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
     public static String[] error;
     public static ArrayList<String> err = new ArrayList<>();
-    
+    public static ArrayList<String> expresiones = new ArrayList<>();
     public static String gramatica;
 
     public PrincipalCompi() {
         //tabla_simbolos
         //err.
         err.clear();
-        Object t=new Object();
-        
+        Object t = new Object();
+
         doc = new DefaultStyledDocument() {
-            
+
             @Override
             public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
                 super.insertString(offset, str, a);
@@ -311,7 +311,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 case ERROR:
                     String ST = jTextPane1.getText();
                     Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
-                    {
+                     {
                         try {
                             s.parse();
                         } catch (Exception ex) {
@@ -320,7 +320,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
                     }
                     Symbol sym = s.getS();
                     modelo.addRow(new Object[]{"<Símbolo no definido>", sym.value});
-                    err.add("Error léxico linea:"+(sym.right+1)+"; el símbolo "+sym.value+" no ha sido definido en el lenguaje");
+                    err.add("Error léxico linea:" + (sym.right + 1) + "; el símbolo " + sym.value + " no ha sido definido en el lenguaje");
                     break;
                 default:
                     modelo.addRow(new Object[]{null, lexer.lexeme});
@@ -430,10 +430,10 @@ public class PrincipalCompi extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,17 +554,17 @@ public class PrincipalCompi extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Nuevo nv=new Nuevo(this, true,this);
         //nv.show();
-        if(seleccionado.showDialog(null, "Guardar") == JFileChooser.APPROVE_OPTION){
+        if (seleccionado.showDialog(null, "Guardar") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionado.getSelectedFile();
-            if(archivo.getName().endsWith("txt")){
+            if (archivo.getName().endsWith("txt")) {
                 String contenido = jTextPane1.getText();
                 String respuesta = gestion.GuardarATexto(archivo, contenido);
-                if(respuesta!=null){
+                if (respuesta != null) {
                     JOptionPane.showMessageDialog(null, respuesta);
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Error al guardar codigo.");
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "El texto se debe guardar en un formato de texto.");
             }
         }
@@ -590,9 +590,10 @@ public class PrincipalCompi extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         tabla_simbolos.clear();
         err.clear();
-        value=null;
-        valueb=null;
-        gramatica="";
+        expresiones.clear();
+        value = null;
+        valueb = null;
+        gramatica = "";
 
         for (int i = 0; i <= 35; i++) {
             sentencia[i] = "";
@@ -636,23 +637,23 @@ public class PrincipalCompi extends javax.swing.JFrame {
         if (err.isEmpty()) {
             error = new String[]{"Análisis realizado correctamente"};
         } else {
-            ci="";
+            ci = "";
             error = new String[err.size()];
             for (int i = 0; i < err.size(); i++) {
                 error[i] = err.get(i);
             }
         }
-        gramatica="terminal Linea, Int, Bool, If, Else, Do, While, For, StopLoop,\n" +
-"    SpinCraneLeft, SpinCraneRight, MoveFowardCrane, MoveBackCrane,\n" +
-"    SpinBallLeft, SpinBallRight, HitToTheLeft, HitToTheRight,\n" +
-"    Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,\n" +
-"    Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,\n" +
-"    Llave_a, Llave_c, Corchete_a, Corchete_c, Start, P_coma, Identificador,\n" +
-"    Numero, WaitTime, ERROR;\n\n" +
-"non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, ELSE,\n" +
-"    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_ARITMETICA, SENTENCIA_FOR;\n" +
-"\n" +
-"start with INICIO;\n\n"+gramatica;
+        gramatica = "terminal Linea, Int, Bool, If, Else, Do, While, For, StopLoop,\n"
+                + "    SpinCraneLeft, SpinCraneRight, MoveFowardCrane, MoveBackCrane,\n"
+                + "    SpinBallLeft, SpinBallRight, HitToTheLeft, HitToTheRight,\n"
+                + "    Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,\n"
+                + "    Op_atribucion, Op_incremento, Op_booleano, Parentesis_a, Parentesis_c,\n"
+                + "    Llave_a, Llave_c, Corchete_a, Corchete_c, Start, P_coma, Identificador,\n"
+                + "    Numero, WaitTime, ERROR;\n\n"
+                + "non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, ELSE,\n"
+                + "    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_ARITMETICA, SENTENCIA_FOR;\n"
+                + "\n"
+                + "start with INICIO;\n\n" + gramatica;
         jList2.setListData(error);
         jTextArea1.setText(ci);
         jTextArea2.setText(new Optimizacion(ci).opt());
@@ -689,54 +690,58 @@ public class PrincipalCompi extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Abrir a=new Abrir(this, true, this);
         //a.setVisible(true);
-        if(seleccionado.showDialog(null, "Abrir") == JFileChooser.APPROVE_OPTION){
+        if (seleccionado.showDialog(null, "Abrir") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionado.getSelectedFile();
-            if(archivo.canRead()){
-                if(archivo.getName().endsWith("txt")){
+            if (archivo.canRead()) {
+                if (archivo.getName().endsWith("txt")) {
                     String contenido = gestion.AbrirATexto(archivo);
                     jTextPane1.setText(contenido);
-                    }else{
-                        JOptionPane.showMessageDialog(null, "Por favor seleccione un archivo de texto");
-                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor seleccione un archivo de texto");
                 }
             }
+        }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        try{
-        JFileChooser fiSa=new JFileChooser();
-        fiSa.showSaveDialog(this);
-        File f=fiSa.getSelectedFile();
-        String path=f.getPath();
-        String endpath=path.substring(path.length()-4,path.length());
-        if(!endpath.equals(".lms")){
-            f=new File(f.getPath()+".lms");
-        }
-        if(f.exists()){
-            f.delete(); 
-            
-        }
+        try {
+            JFileChooser fiSa = new JFileChooser();
+            fiSa.showSaveDialog(this);
+            File f = fiSa.getSelectedFile();
+            String path = f.getPath();
+            String endpath = path.substring(path.length() - 4, path.length());
+            if (!endpath.equals(".lms")) {
+                f = new File(f.getPath() + ".lms");
+            }
+            if (f.exists()) {
+                f.delete();
+
+            }
             f.createNewFile();
-        
-        FileWriter fw=new FileWriter(f,true);
-        CodigoLMS cod=new CodigoLMS(ci);
-        String tx=cod.lms();
-        fw.write(tx);
-        fw.close();
-        }catch(IOException e){
-            javax.swing.JOptionPane.showMessageDialog(null,"No se pudo guardar el archivo.");
-        }catch(Exception e){
-            javax.swing.JOptionPane.showMessageDialog(null,"El archivo debe ser .lms");
+
+            FileWriter fw = new FileWriter(f, true);
+            CodigoLMS cod = new CodigoLMS(ci);
+            String tx = cod.lms();
+            fw.write(tx);
+            fw.close();
+        } catch (IOException e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No se pudo guardar el archivo.");
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "El archivo debe ser .lms");
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        // TODO add your handling code here:
+        if (err.isEmpty()) {
+            new VentanaArbol(expresiones).setVisible(true);
+        } else {
+            new VentanaArbol().setVisible(true);
+        }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
-        Automata a=new Automata(this, true, this, gramatica);
+        Automata a = new Automata(this, true, this, gramatica);
         a.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
