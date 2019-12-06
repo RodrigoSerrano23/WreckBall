@@ -636,12 +636,17 @@ public class PrincipalCompi extends javax.swing.JFrame {
         }
         if (err.isEmpty()) {
             error = new String[]{"Análisis realizado correctamente"};
+            jTextArea2.setText(new Optimizacion(ci).opt());
+        jTextArea3.setText(new CodigoLMS(jTextArea2.getText()).lms());
+            
         } else {
             ci = "";
             error = new String[err.size()];
             for (int i = 0; i < err.size(); i++) {
                 error[i] = err.get(i);
             }
+            jTextArea2.setText("");
+        jTextArea3.setText("");
         }
         gramatica = "terminal Linea, Int, Bool, If, Else, Do, While, For, StopLoop,\n"
                 + "    SpinCraneLeft, SpinCraneRight, MoveFowardCrane, MoveBackCrane,\n"
@@ -656,7 +661,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 + "start with INICIO;\n\n" + gramatica;
         jList2.setListData(error);
         jTextArea1.setText(ci);
-        jTextArea2.setText(new Optimizacion(ci).opt());
+        
         System.out.println(tabla_simbolos.size());
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -718,16 +723,16 @@ public class PrincipalCompi extends javax.swing.JFrame {
 
             }
             f.createNewFile();
-
-            FileWriter fw = new FileWriter(f, true);
-            CodigoLMS cod = new CodigoLMS(ci);
-            String tx = cod.lms();
-            fw.write(tx);
-            fw.close();
-        } catch (IOException e) {
-            javax.swing.JOptionPane.showMessageDialog(null, "No se pudo guardar el archivo.");
-        } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(null, "El archivo debe ser .lms");
+        
+        FileWriter fw=new FileWriter(f,true);
+        CodigoLMS cod=new CodigoLMS(jTextArea2.getText());
+        String tx=cod.lms();
+        fw.write(tx);
+        fw.close();
+        }catch(IOException e){
+            javax.swing.JOptionPane.showMessageDialog(null,"No se pudo guardar el archivo.");
+        }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"El archivo debe ser .lms");
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
