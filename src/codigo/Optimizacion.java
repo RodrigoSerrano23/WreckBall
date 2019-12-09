@@ -38,16 +38,17 @@ public class Optimizacion {
         String o1=a;
         do{
             o1=optimizarSeleccion(o1);
+            s++;
         }while(s<cS);
         String o2=o1;
         do{
             o2=optimizarLoop(o2);
+            l++;
         }while(l<cL);   
         return o2;
     }
 
     private String optimizarLoop(String a) {
-        l=0;
         boolean loopC=true;
         String[] prueba=a.split("\n");
         int i=0;
@@ -134,21 +135,25 @@ public class Optimizacion {
     }
     
     private String optimizarSeleccion(String a){
-        s=0;
         String[] prueba=a.split("\n");
         int i=0;
         do{
             if(prueba[i].equals("(jf choice"+s+":,false, , )")){
                 prueba[i]="";
                 boolean b=true;
+                boolean b2=false;
                 do{
                     if(prueba[i].equals("choice"+s+":")){
                         b=false;
+                    }
+                    if(prueba[i].equals("(jmp choice"+(s+1)+":, , , )")){
+                        b2=true;
                     }
                     prueba[i]="";
                     i++;
                 }while(b);
                 int i2=i;
+                if(b2){
                 do{
                     if(prueba[i2].equals("choice"+(s+1)+":")){
                         prueba[i2]="";
@@ -157,8 +162,9 @@ public class Optimizacion {
                     }
                     i2++;
                 }while(i2<prueba.length);
+                }
             }
-            if(prueba[i].equals("(jf choice"+l+":,true, , )")){
+            if(prueba[i].equals("(jf choice"+s+":,true, , )")){
                 prueba[i]="";
                 i++;
                 boolean r=true;
@@ -168,7 +174,7 @@ public class Optimizacion {
                         r=false;
                         prueba[i]="";
                     }
-                    if(prueba[i].equals("(jmp choice"+l+", , , )")){
+                    if(prueba[i].equals("(jmp choice"+s+", , , )")){
                         s2=true;
                         prueba[i]="";
                     }
@@ -187,7 +193,6 @@ public class Optimizacion {
                     i--;
                 }  
             }
-            s++;
             i++;
         }while(i<prueba.length);
         String res="";
@@ -215,16 +220,20 @@ public class Optimizacion {
         for(int i=0;i<enteros.size();i++){
             boolean useful=false;
             for(int j=0;j<cuartetos.length;j++){
-                String[] elementos=cuartetos[j].substring(1,cuartetos[j].length()-1).split(",");
-                if(elementos[1].equals(enteros.get(i)) || elementos[2].equals(enteros.get(i))){
-                    useful=true;
+                if(!cuartetos[j].matches("[a-zA-Z_0-9]+:") && !cuartetos[j].equals("")){
+                    String[] elementos=cuartetos[j].substring(1,cuartetos[j].length()-1).split(",");
+                    if(elementos[1].equals(enteros.get(i)) || elementos[2].equals(enteros.get(i))){
+                        useful=true;
+                    }
                 }
             }
             if(!useful){
                 for(int j=0;j<cuartetos.length;j++){
-                    String[] elementos=cuartetos[j].substring(1,cuartetos[j].length()-1).split(",");
-                    if(elementos[3].equals(enteros.get(i))){
-                        cuartetos[j]="";
+                    if(!cuartetos[j].matches("[a-zA-Z_0-9]+:") && !cuartetos[j].equals("")){
+                        String[] elementos=cuartetos[j].substring(1,cuartetos[j].length()-1).split(",");
+                        if(elementos[3].equals(enteros.get(i))){
+                            cuartetos[j]="";
+                        }
                     }
                 }
             }
@@ -232,16 +241,20 @@ public class Optimizacion {
         for(int i=0;i<booleanos.size();i++){
             boolean useful=false;
             for(int j=0;j<cuartetos.length;j++){
-                String[] elementos=cuartetos[j].substring(1,cuartetos[j].length()-1).split(",");
-                if(elementos[1].equals(booleanos.get(i)) || elementos[2].equals(booleanos.get(i))){
-                    useful=true;
+                if(!cuartetos[j].matches("[a-zA-Z_0-9]+:") && !cuartetos[j].equals("")){
+                    String[] elementos=cuartetos[j].substring(1,cuartetos[j].length()-1).split(",");
+                    if(elementos[1].equals(booleanos.get(i)) || elementos[2].equals(booleanos.get(i))){
+                        useful=true;
+                    }
                 }
             }
             if(!useful){
                 for(int j=0;j<cuartetos.length;j++){
-                    String[] elementos=cuartetos[j].substring(1,cuartetos[j].length()-1).split(",");
-                    if(elementos[3].equals(booleanos.get(i))){
-                        cuartetos[j]="";
+                    if(!cuartetos[j].matches("[a-zA-Z_0-9]+:") && !cuartetos[j].equals("")){
+                        String[] elementos=cuartetos[j].substring(1,cuartetos[j].length()-1).split(",");
+                        if(elementos[3].equals(booleanos.get(i))){
+                            cuartetos[j]="";
+                        }
                     }
                 }
             }

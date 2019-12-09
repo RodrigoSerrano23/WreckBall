@@ -67,7 +67,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     public static String ifs;
     public static String elses;
     public static String s_arit;
-    public static String s_bool;
+    public static String s_bool[] =new String[36];
     public static String whiles;
     public static String dowhiles;
     public static String fors;
@@ -79,6 +79,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
     public static int temp;
     public static int tempb;
     public static int status;
+    public static int statusBool;
     public static int choice;
     public static int loop;
 
@@ -594,15 +595,15 @@ public class PrincipalCompi extends javax.swing.JFrame {
         value = null;
         valueb = null;
         gramatica = "";
-
+        statusBool=0;
         for (int i = 0; i <= 35; i++) {
             sentencia[i] = "";
+            s_bool[i] = "";
         }
         declaracion = "";
         ifs = "";
         elses = "";
         s_arit = "";
-        s_bool = "";
         whiles = "";
         dowhiles = "";
         fors = "";
@@ -610,6 +611,7 @@ public class PrincipalCompi extends javax.swing.JFrame {
         d_for = "";
         status = 0;
         temp = 0;
+        tempb=0;
         choice = 0;
         loop = 0;
         String resultado;
