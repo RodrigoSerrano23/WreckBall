@@ -38,9 +38,6 @@ espacio=[ ,\t,\r]+
 /* Palabra reservada While */
 ( while ) {lexeme=yytext(); return While;}
 
-/* Palabra reservada For */
-( for ) {lexeme=yytext(); return For;}
-
 /* Palabra reservada StopLoop */
 ( stopLoop ) {lexeme=yytext(); return StopLoop;}
 

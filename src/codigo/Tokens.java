@@ -17,7 +17,6 @@ public enum Tokens {
     Else,
     Do,
     While,
-    For,
     StopLoop,
     SpinCraneLeft,
     SpinCraneRight,

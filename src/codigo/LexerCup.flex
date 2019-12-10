@@ -47,9 +47,6 @@ espacio=[ ,\t,\r,\n]+
 /* Palabra reservada While */
 ( while ) {return new Symbol(sym.While, yychar, yyline, yytext());}
 
-/* Palabra reservada For */
-( for ) {return new Symbol(sym.For, yychar, yyline, yytext());}
-
 /* Palabra reservada StopLoop */
 ( stopLoop ) {return new Symbol(sym.StopLoop, yychar, yyline, yytext());}
 

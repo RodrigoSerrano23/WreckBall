@@ -15,7 +15,7 @@ parser code
 }
 :};
 
-terminal Linea, Int, Bool, If, Else, Do, While, For, StopLoop,
+terminal Linea, Int, Bool, If, Else, Do, While, StopLoop,
     SpinCraneLeft, SpinCraneRight, MoveFowardCrane, MoveBackCrane,
     SpinBallLeft, SpinBallRight, HitToTheLeft, HitToTheRight,
     Igual, Suma, Resta, Multiplicacion, Division, Op_logico, Op_relacional,
@@ -23,7 +23,7 @@ terminal Linea, Int, Bool, If, Else, Do, While, For, StopLoop,
     Llave_a, Llave_c, Corchete_a, Corchete_c, Start, P_coma, Identificador,
     Numero, WaitTime, ERROR;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, ELSE,
-    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_ARITMETICA, SENTENCIA_FOR;
+    WHILE, DO_WHILE, SENTENCIA_BOOLEANA, SENTENCIA_ARITMETICA;
 
 start with INICIO;
 
@@ -163,20 +163,7 @@ SENTENCIA ::=
     PrincipalCompi.dowhiles="";
     PrincipalCompi.status++;
     PrincipalCompi.gramatica="SENTENCIA ::= DO_WHILE\n\n"+PrincipalCompi.gramatica;
-    :} |
-    SENTENCIA FOR {:
-    PrincipalCompi.status--;
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.fors;
-    PrincipalCompi.fors="";
-    PrincipalCompi.status++;
-    PrincipalCompi.gramatica="SENTENCIA ::= SENTENCIA FOR\n\n"+PrincipalCompi.gramatica;
-    :} |
-    FOR {:
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.fors;
-    PrincipalCompi.fors="";
-    PrincipalCompi.status++;
-    PrincipalCompi.gramatica="SENTENCIA ::= FOR\n\n"+PrincipalCompi.gramatica;
-    :}
+    :} 
 ;
 DECLARACION ::= 
     Int:t Identificador:i P_coma {:
@@ -2166,89 +2153,4 @@ DO_WHILE ::= Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA 
         }
     :}
     
-;
-FOR ::= For Parentesis_a SENTENCIA_FOR Parentesis_c Llave_a SENTENCIA Llave_c {:
-    PrincipalCompi.status--;
-    PrincipalCompi.fors=PrincipalCompi.s_for+PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.d_for+"loop"+PrincipalCompi.loop+":\n";
-    :}
-;
-SENTENCIA_FOR ::=
-    Int:t Identificador:i Igual:g Numero:n P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR {:
-    PrincipalCompi.s_for="("+t+", , ,"+i+")\n("+g+","+n+", ,"+i+")\nstartloop"+PrincipalCompi.loop+":\n";
-    PrincipalCompi.s_for=PrincipalCompi.s_bool+"(iff,TB"+PrincipalCompi.tempb+", , )\n(jnz loop"+PrincipalCompi.loop+":, , , )\n";
-    Simbolo a=null;
-        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
-            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
-                a=PrincipalCompi.tabla_simbolos.get(it);
-            }
-        }
-        if(a==null){
-            a=new Simbolo(i,t,n);
-            PrincipalCompi.tabla_simbolos.add(a);
-        }else{
-            PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" ya fue declarado anteriormente");
-        }
-    :} |
-    Identificador:i Igual:g Numero:n P_coma SENTENCIA_BOOLEANA P_coma DECLARACION_FOR {:
-    PrincipalCompi.s_for="("+g+","+n+", ,"+i+")\nstartloop"+PrincipalCompi.loop+":\n";
-    PrincipalCompi.s_for=PrincipalCompi.s_bool+"(jf loop"+PrincipalCompi.loop+":,"+PrincipalCompi.tempb+", , )\n";
-    PrincipalCompi.tempb++;
-    Simbolo a=null;
-        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
-            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
-                a=PrincipalCompi.tabla_simbolos.get(it);
-            }
-        }
-        if(a==null){
-            PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no ha sido declarado");
-        }else{
-            if(!a.getTipo().toString().equals("int")){
-                PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no es de tipo int");
-            }else{
-                a.setValor(n);
-            }
-        }
-    :}
-;
-DECLARACION_FOR ::= 
-    Identificador:i Op_atribucion:o Numero:n {:
-    PrincipalCompi.d_for="("+o+","+n+", ,"+i+")\n";
-    Simbolo a=null;
-        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
-            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
-                a=PrincipalCompi.tabla_simbolos.get(it);
-            }
-        }
-        if(a==null){
-            PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no ha sido declarado");
-        }else{
-            if(!a.getTipo().toString().equals("int")){
-                PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no es de tipo int");
-            }else{
-                if(a.getValor()==null){
-                    PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no ha sido inicializado");
-                }
-            }
-        }
-    :}|
-    Identificador:i Op_incremento:o {:
-    PrincipalCompi.d_for="("+o+", , ,"+i+")\n";
-    Simbolo a=null;
-        for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
-            if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
-                a=PrincipalCompi.tabla_simbolos.get(it);
-            }
-        }
-        if(a==null){
-            PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no ha sido declarado");
-        }else{
-            if(!a.getTipo().toString().equals("int")){
-                PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no es de tipo int");
-            }else{
-                if(a.getValor()==null){
-                    PrincipalCompi.err.add("Error semántico linea:"+(iright+1)+"; el identificador "+i+" no ha sido inicializado");
-                }
-            }
-        }
-    :}
 ;

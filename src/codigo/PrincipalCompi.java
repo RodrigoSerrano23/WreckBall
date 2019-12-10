@@ -215,9 +215,6 @@ public class PrincipalCompi extends javax.swing.JFrame {
                 case While:
                     modelo.addRow(new Object[]{"<Reservada while>", lexer.lexeme});
                     break;
-                case For:
-                    modelo.addRow(new Object[]{"<Reservada for>", lexer.lexeme});
-                    break;
                 case StopLoop:
                     modelo.addRow(new Object[]{"<Reservada stopLoop>", lexer.lexeme});
                     break;
