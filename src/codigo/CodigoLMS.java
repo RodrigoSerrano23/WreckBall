@@ -192,22 +192,22 @@ public class CodigoLMS {
     
     private String mayor_o_igual_que(String a,String b){
         if(a.length()>2 && a.substring(0,2).equals("TA")){
-            return "CP_GTE16("+a+",sixteenRegister,eightRegister)\n";
+            return "CP_GTEQ16("+a+",sixteenRegister,eightRegister)\n";
         }
         if(b.length()>2 && b.substring(0,2).equals("TA")){
-            return "CP_GTE16(sixteenRegister,"+b+",eightRegister)\n";
+            return "CP_GTEQ16(sixteenRegister,"+b+",eightRegister)\n";
         }
-        return "CP_GTE16("+a+","+b+",eightRegister)\n";
+        return "CP_GTEQ16("+a+","+b+",eightRegister)\n";
     }
     
     private String menor_o_igual_que(String a,String b){
         if(a.length()>2 && a.substring(0,2).equals("TA")){
-            return "CP_LTE16("+a+",sixteenRegister,eightRegister)\n";
+            return "CP_LTEQ16("+a+",sixteenRegister,eightRegister)\n";
         }
         if(b.length()>2 && b.substring(0,2).equals("TA")){
-            return "CP_LTE16(sixteenRegister,"+b+",eightRegister)\n";
+            return "CP_LTEQ16(sixteenRegister,"+b+",eightRegister)\n";
         }
-        return "CP_LTE16("+a+","+b+",eightRegister)\n";
+        return "CP_LTEQ16("+a+","+b+",eightRegister)\n";
     }
     
     private String spinCraneLeft(String a){

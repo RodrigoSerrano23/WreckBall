@@ -466,9 +466,10 @@ DECLARACION ::=
 
 
     Bool:t Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma {:
+    PrincipalCompi.statusBool--;
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n"+PrincipalCompi.s_bool+"("+g+",TB"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
-    PrincipalCompi.s_bool="";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -496,9 +497,10 @@ DECLARACION ::=
 
 
     Identificador:i Igual:g SENTENCIA_BOOLEANA P_coma {:
+    PrincipalCompi.statusBool--;
     PrincipalCompi.declaracion=PrincipalCompi.s_bool+"("+g+",TB"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
-    PrincipalCompi.s_bool="";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1348,10 +1350,11 @@ DECLARACION ::=
 ;
 IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
-    PrincipalCompi.ifs=PrincipalCompi.s_bool;
+    PrincipalCompi.statusBool--;
+    PrincipalCompi.ifs=PrincipalCompi.s_bool[PrincipalCompi.statusBool];
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.tempb++;
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     PrincipalCompi.choice++;
     PrincipalCompi.valueb=null;
     :}|
@@ -1366,13 +1369,13 @@ IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
     If Parentesis_a Op_booleano:o Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+o+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     PrincipalCompi.choice++;
     :}|
     If Parentesis_a Identificador:i Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+i+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     PrincipalCompi.choice++;
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
@@ -1394,12 +1397,13 @@ IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
     :}|
     If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c ELSE {:
     PrincipalCompi.status--;
-    PrincipalCompi.ifs=PrincipalCompi.s_bool;
-    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp choice"+PrincipalCompi.choice+":, , , )\n"+"choice"+(PrincipalCompi.choice+1)+":\n";
+    PrincipalCompi.statusBool--;
+    PrincipalCompi.ifs=PrincipalCompi.s_bool[PrincipalCompi.statusBool];
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp choice"+(PrincipalCompi.choice+1)+":, , , )\n"+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.tempb++;
     PrincipalCompi.choice++;
     PrincipalCompi.ifs=PrincipalCompi.ifs+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.elses="";
     PrincipalCompi.choice++;
     PrincipalCompi.valueb=null;
     :}|
@@ -1409,7 +1413,7 @@ IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
     PrincipalCompi.tempb++;
     PrincipalCompi.choice++;
     PrincipalCompi.ifs=PrincipalCompi.ifs+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.elses="";
     PrincipalCompi.choice++;
     :} |
     If Parentesis_a Identificador:i Parentesis_c Llave_a SENTENCIA Llave_c ELSE {:
@@ -1417,7 +1421,7 @@ IF ::= If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+i+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp choice"+(PrincipalCompi.choice+1)+":, , , )\n"+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.choice++;
     PrincipalCompi.ifs=PrincipalCompi.ifs+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.elses="";
     PrincipalCompi.choice++;
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
@@ -1445,7 +1449,8 @@ ELSE ::=Else Llave_a SENTENCIA Llave_c {:
 ;
 SENTENCIA_BOOLEANA ::=  
     Identificador:i Op_relacional:o Op_booleano:b {:
-    PrincipalCompi.s_bool="("+o+","+i+","+b+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="("+o+","+i+","+b+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre())){
@@ -1473,7 +1478,8 @@ SENTENCIA_BOOLEANA ::=
     }
     :}|
     Op_booleano:b Op_relacional:o Identificador:i {:
-    PrincipalCompi.s_bool="("+o+","+b+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="("+o+","+b+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1501,8 +1507,9 @@ SENTENCIA_BOOLEANA ::=
     }
     :}|
     Identificador:i Op_relacional:o SENTENCIA_ARITMETICA {:
-    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+i+",TA"+PrincipalCompi.temp+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.s_arit+"("+o+","+i+",TA"+PrincipalCompi.temp+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1537,8 +1544,9 @@ SENTENCIA_BOOLEANA ::=
     }
     :}|
     SENTENCIA_ARITMETICA Op_relacional:o Identificador:i {:
-    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+",TA"+PrincipalCompi.temp+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.s_arit+"("+o+",TA"+PrincipalCompi.temp+","+i+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre())){
@@ -1573,9 +1581,10 @@ SENTENCIA_BOOLEANA ::=
     }
     :}|
     Identificador:i Op_relacional:o Identificador:n {:
-    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.s_arit+"("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
     Simbolo a=null;
     Simbolo b=null;
+    PrincipalCompi.statusBool++;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
             a=PrincipalCompi.tabla_simbolos.get(it);
@@ -1624,8 +1633,9 @@ SENTENCIA_BOOLEANA ::=
     }
     :}|
     Identificador:i Op_relacional:o Numero:n {:
-    PrincipalCompi.s_bool="("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1657,8 +1667,9 @@ SENTENCIA_BOOLEANA ::=
     }
     :}|
     Numero:n Op_relacional:o Identificador:i {:
-    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+n+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.s_arit+"("+o+","+n+","+i+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -2075,25 +2086,26 @@ SENTENCIA_ARITMETICA ::=
 ;
 WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
-    PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.s_bool+"(jf loop"+PrincipalCompi.loop+":,TB"+PrincipalCompi.tempb+", , )\n";
+    PrincipalCompi.statusBool--;
+    PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.s_bool[PrincipalCompi.statusBool]+"(jf loop"+PrincipalCompi.loop+":,TB"+PrincipalCompi.tempb+", , )\n";
     PrincipalCompi.whiles=PrincipalCompi.whiles+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp startloop"+PrincipalCompi.loop+":, , , )\nloop"+PrincipalCompi.loop+":\n";
     PrincipalCompi.loop++;
     PrincipalCompi.tempb++;
-    PrincipalCompi.s_bool=PrincipalCompi.sentencia[PrincipalCompi.status]="";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.sentencia[PrincipalCompi.status]="";
     :} |
     While Parentesis_a Op_booleano:o Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
     PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+"(jf loop"+PrincipalCompi.loop+":,"+o+", , )\n";
     PrincipalCompi.whiles=PrincipalCompi.whiles+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp startloop"+PrincipalCompi.loop+":, , , )\nloop"+PrincipalCompi.loop+":\n";
     PrincipalCompi.loop++;
-    PrincipalCompi.s_bool=PrincipalCompi.sentencia[PrincipalCompi.status]="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]="";
     :} |
     While Parentesis_a Identificador:o Parentesis_c Llave_a SENTENCIA Llave_c {:
     PrincipalCompi.status--;
     PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+"(jf loop"+PrincipalCompi.loop+":,"+o+", , )\n";
     PrincipalCompi.whiles=PrincipalCompi.whiles+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp startloop"+PrincipalCompi.loop+":, , , )\nloop"+PrincipalCompi.loop+":\n";
     PrincipalCompi.loop++;
-    PrincipalCompi.s_bool=PrincipalCompi.sentencia[PrincipalCompi.status]="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]="";
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(o.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -2115,11 +2127,12 @@ WHILE ::= While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c Llave_a SENTENCIA L
 ;
 DO_WHILE ::= Do Llave_a SENTENCIA Llave_c While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma {:
     PrincipalCompi.status--;
-    PrincipalCompi.dowhiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.s_bool;
+    PrincipalCompi.statusBool--;
+    PrincipalCompi.dowhiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.s_bool[PrincipalCompi.statusBool];
     PrincipalCompi.dowhiles=PrincipalCompi.dowhiles+"(jt startloop"+PrincipalCompi.loop+":,TB"+PrincipalCompi.tempb+", , )\nloop"+PrincipalCompi.loop+":\n";
     PrincipalCompi.tempb++;
     PrincipalCompi.loop++;
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     :} |
     Do Llave_a SENTENCIA Llave_c While Parentesis_a Op_booleano:o Parentesis_c P_coma {:
     PrincipalCompi.status--;

@@ -1280,11 +1280,12 @@ class CUP$Sintax$actions {
               Object RESULT =null;
 		
     PrincipalCompi.status--;
-    PrincipalCompi.dowhiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.s_bool;
+    PrincipalCompi.statusBool--;
+    PrincipalCompi.dowhiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+PrincipalCompi.s_bool[PrincipalCompi.statusBool];
     PrincipalCompi.dowhiles=PrincipalCompi.dowhiles+"(jt startloop"+PrincipalCompi.loop+":,TB"+PrincipalCompi.tempb+", , )\nloop"+PrincipalCompi.loop+":\n";
     PrincipalCompi.tempb++;
     PrincipalCompi.loop++;
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     
               CUP$Sintax$result = parser.getSymbolFactory().newSymbol("DO_WHILE",7, ((java_cup.runtime.Symbol)CUP$Sintax$stack.elementAt(CUP$Sintax$top-8)), ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()), RESULT);
             }
@@ -1302,7 +1303,7 @@ class CUP$Sintax$actions {
     PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+"(jf loop"+PrincipalCompi.loop+":,"+o+", , )\n";
     PrincipalCompi.whiles=PrincipalCompi.whiles+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp startloop"+PrincipalCompi.loop+":, , , )\nloop"+PrincipalCompi.loop+":\n";
     PrincipalCompi.loop++;
-    PrincipalCompi.s_bool=PrincipalCompi.sentencia[PrincipalCompi.status]="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]="";
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(o.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -1337,7 +1338,7 @@ class CUP$Sintax$actions {
     PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+"(jf loop"+PrincipalCompi.loop+":,"+o+", , )\n";
     PrincipalCompi.whiles=PrincipalCompi.whiles+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp startloop"+PrincipalCompi.loop+":, , , )\nloop"+PrincipalCompi.loop+":\n";
     PrincipalCompi.loop++;
-    PrincipalCompi.s_bool=PrincipalCompi.sentencia[PrincipalCompi.status]="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]="";
     
               CUP$Sintax$result = parser.getSymbolFactory().newSymbol("WHILE",6, ((java_cup.runtime.Symbol)CUP$Sintax$stack.elementAt(CUP$Sintax$top-6)), ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()), RESULT);
             }
@@ -1349,11 +1350,12 @@ class CUP$Sintax$actions {
               Object RESULT =null;
 		
     PrincipalCompi.status--;
-    PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.s_bool+"(jf loop"+PrincipalCompi.loop+":,TB"+PrincipalCompi.tempb+", , )\n";
+    PrincipalCompi.statusBool--;
+    PrincipalCompi.whiles="startloop"+PrincipalCompi.loop+":\n"+PrincipalCompi.s_bool[PrincipalCompi.statusBool]+"(jf loop"+PrincipalCompi.loop+":,TB"+PrincipalCompi.tempb+", , )\n";
     PrincipalCompi.whiles=PrincipalCompi.whiles+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp startloop"+PrincipalCompi.loop+":, , , )\nloop"+PrincipalCompi.loop+":\n";
     PrincipalCompi.loop++;
     PrincipalCompi.tempb++;
-    PrincipalCompi.s_bool=PrincipalCompi.sentencia[PrincipalCompi.status]="";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.sentencia[PrincipalCompi.status]="";
     
               CUP$Sintax$result = parser.getSymbolFactory().newSymbol("WHILE",6, ((java_cup.runtime.Symbol)CUP$Sintax$stack.elementAt(CUP$Sintax$top-6)), ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()), RESULT);
             }
@@ -2035,8 +2037,9 @@ class CUP$Sintax$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()).right;
 		Object i = (Object)((java_cup.runtime.Symbol) CUP$Sintax$stack.peek()).value;
 		
-    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+n+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.s_arit+"("+o+","+n+","+i+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -2085,8 +2088,9 @@ class CUP$Sintax$actions {
 		int nright = ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()).right;
 		Object n = (Object)((java_cup.runtime.Symbol) CUP$Sintax$stack.peek()).value;
 		
-    PrincipalCompi.s_bool="("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -2135,9 +2139,10 @@ class CUP$Sintax$actions {
 		int nright = ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()).right;
 		Object n = (Object)((java_cup.runtime.Symbol) CUP$Sintax$stack.peek()).value;
 		
-    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.s_arit+"("+o+","+i+","+n+",TB"+PrincipalCompi.tempb+")\n";
     Simbolo a=null;
     Simbolo b=null;
+    PrincipalCompi.statusBool++;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
             a=PrincipalCompi.tabla_simbolos.get(it);
@@ -2200,8 +2205,9 @@ class CUP$Sintax$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()).right;
 		Object i = (Object)((java_cup.runtime.Symbol) CUP$Sintax$stack.peek()).value;
 		
-    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+",TA"+PrincipalCompi.temp+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.s_arit+"("+o+",TA"+PrincipalCompi.temp+","+i+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre())){
@@ -2250,8 +2256,9 @@ class CUP$Sintax$actions {
 		int oright = ((java_cup.runtime.Symbol)CUP$Sintax$stack.elementAt(CUP$Sintax$top-1)).right;
 		Object o = (Object)((java_cup.runtime.Symbol) CUP$Sintax$stack.elementAt(CUP$Sintax$top-1)).value;
 		
-    PrincipalCompi.s_bool=PrincipalCompi.s_arit+"("+o+","+i+",TA"+PrincipalCompi.temp+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.s_arit+"("+o+","+i+",TA"+PrincipalCompi.temp+",TB"+PrincipalCompi.tempb+")\n";
     PrincipalCompi.temp++;
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -2303,7 +2310,8 @@ class CUP$Sintax$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()).right;
 		Object i = (Object)((java_cup.runtime.Symbol) CUP$Sintax$stack.peek()).value;
 		
-    PrincipalCompi.s_bool="("+o+","+b+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="("+o+","+b+","+i+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -2348,7 +2356,8 @@ class CUP$Sintax$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()).right;
 		Object b = (Object)((java_cup.runtime.Symbol) CUP$Sintax$stack.peek()).value;
 		
-    PrincipalCompi.s_bool="("+o+","+i+","+b+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="("+o+","+i+","+b+",TB"+PrincipalCompi.tempb+")\n";
+    PrincipalCompi.statusBool++;
     Simbolo a=null;
     for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
         if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre())){
@@ -2403,7 +2412,7 @@ class CUP$Sintax$actions {
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+i+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp choice"+(PrincipalCompi.choice+1)+":, , , )\n"+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.choice++;
     PrincipalCompi.ifs=PrincipalCompi.ifs+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.elses="";
     PrincipalCompi.choice++;
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
@@ -2440,7 +2449,7 @@ class CUP$Sintax$actions {
     PrincipalCompi.tempb++;
     PrincipalCompi.choice++;
     PrincipalCompi.ifs=PrincipalCompi.ifs+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.elses="";
     PrincipalCompi.choice++;
     
               CUP$Sintax$result = parser.getSymbolFactory().newSymbol("IF",4, ((java_cup.runtime.Symbol)CUP$Sintax$stack.elementAt(CUP$Sintax$top-7)), ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()), RESULT);
@@ -2453,12 +2462,13 @@ class CUP$Sintax$actions {
               Object RESULT =null;
 		
     PrincipalCompi.status--;
-    PrincipalCompi.ifs=PrincipalCompi.s_bool;
-    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp choice"+PrincipalCompi.choice+":, , , )\n"+"choice"+(PrincipalCompi.choice+1)+":\n";
+    PrincipalCompi.statusBool--;
+    PrincipalCompi.ifs=PrincipalCompi.s_bool[PrincipalCompi.statusBool];
+    PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"(jmp choice"+(PrincipalCompi.choice+1)+":, , , )\n"+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.tempb++;
     PrincipalCompi.choice++;
     PrincipalCompi.ifs=PrincipalCompi.ifs+PrincipalCompi.elses+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool=PrincipalCompi.elses="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]=PrincipalCompi.elses="";
     PrincipalCompi.choice++;
     PrincipalCompi.valueb=null;
     
@@ -2476,7 +2486,7 @@ class CUP$Sintax$actions {
 		
     PrincipalCompi.status--;
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+i+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     PrincipalCompi.choice++;
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
@@ -2510,7 +2520,7 @@ class CUP$Sintax$actions {
 		
     PrincipalCompi.status--;
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,"+o+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     PrincipalCompi.choice++;
     
               CUP$Sintax$result = parser.getSymbolFactory().newSymbol("IF",4, ((java_cup.runtime.Symbol)CUP$Sintax$stack.elementAt(CUP$Sintax$top-6)), ((java_cup.runtime.Symbol)CUP$Sintax$stack.peek()), RESULT);
@@ -2532,10 +2542,11 @@ class CUP$Sintax$actions {
               Object RESULT =null;
 		
     PrincipalCompi.status--;
-    PrincipalCompi.ifs=PrincipalCompi.s_bool;
+    PrincipalCompi.statusBool--;
+    PrincipalCompi.ifs=PrincipalCompi.s_bool[PrincipalCompi.statusBool];
     PrincipalCompi.ifs=PrincipalCompi.ifs+"(jf choice"+PrincipalCompi.choice+":,TB"+PrincipalCompi.tempb+", , )\n"+PrincipalCompi.sentencia[PrincipalCompi.status]+"choice"+PrincipalCompi.choice+":\n";
     PrincipalCompi.tempb++;
-    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool="";
+    PrincipalCompi.sentencia[PrincipalCompi.status]=PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     PrincipalCompi.choice++;
     PrincipalCompi.valueb=null;
     
@@ -5034,9 +5045,10 @@ class CUP$Sintax$actions {
 		int gright = ((java_cup.runtime.Symbol)CUP$Sintax$stack.elementAt(CUP$Sintax$top-2)).right;
 		Object g = (Object)((java_cup.runtime.Symbol) CUP$Sintax$stack.elementAt(CUP$Sintax$top-2)).value;
 		
+    PrincipalCompi.statusBool--;
     PrincipalCompi.declaracion=PrincipalCompi.s_bool+"("+g+",TB"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
-    PrincipalCompi.s_bool="";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
@@ -5090,9 +5102,10 @@ class CUP$Sintax$actions {
 		int gright = ((java_cup.runtime.Symbol)CUP$Sintax$stack.elementAt(CUP$Sintax$top-2)).right;
 		Object g = (Object)((java_cup.runtime.Symbol) CUP$Sintax$stack.elementAt(CUP$Sintax$top-2)).value;
 		
+    PrincipalCompi.statusBool--;
     PrincipalCompi.declaracion="("+t+", , ,"+i+")\n"+PrincipalCompi.s_bool+"("+g+",TB"+PrincipalCompi.temp+", ,"+i+")\n";
     PrincipalCompi.temp++;
-    PrincipalCompi.s_bool="";
+    PrincipalCompi.s_bool[PrincipalCompi.statusBool]="";
     Simbolo a=null;
         for(int it=0;it<PrincipalCompi.tabla_simbolos.size();it++){
             if(i.equals(PrincipalCompi.tabla_simbolos.get(it).getNombre().toString())){
